@@ -8,7 +8,7 @@ const validate = async (schema, obj, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    res.status(400).json({ status: "error", code: 400, message: `Field ${}` });
+    res.status(400).json({ status: "error", code: 400, message: `Field: ${message.replace(/"/g, '')}` });
   }
 };
 const pattern = '\\w{8}-\\w{4}-\\w{4}-\\w{12}'
