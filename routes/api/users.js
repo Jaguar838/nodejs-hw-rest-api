@@ -3,7 +3,11 @@ const router = express.Router();
 
 const Users = require("../../model");
 
-// const { validateUser, validateID, validate?} = require('./validation')
+const {
+  validateUser,
+  validateUserPatch,
+  validateUserId,
+} = require("./validation");
 
 // Получаем список юзеров из json
 router.get("/", async (req, res, next) => {
@@ -16,7 +20,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // Добавляем одного юзера в файл json
-router.post("/", async (req, res, next) => {
+router.post("/", validateUser, async (req, res, next) => {
   try {
     const user = await Users.addUser(req.body);
     res.status(201).json({ status: "succes", code: 201, data: { user } });
@@ -26,7 +30,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // Обновляем поля юзера
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", validateUserId, async (req, res, next) => {
   try {
     const user = await Users.updateUser(req.params.id, req.body);
     if (user) {
@@ -43,7 +47,7 @@ router.put("/:id", async (req, res, next) => {
 });
 
 // Обновляем статус пользователя
-router.patch("/:id/favorite/", async (req, res, next) => {
+router.patch("/:id/favorite/", validateUserPatch, async (req, res, next) => {
   try {
     const user = await Users.updateUser(req.params.id, req.body);
     if (user) {
@@ -59,7 +63,7 @@ router.patch("/:id/favorite/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", validateUserId, async (req, res, next) => {
   try {
     const user = await Users.getUserId(req.params.id, req.body);
     if (user) {
@@ -75,7 +79,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", validateUserId, async (req, res, next) => {
   try {
     const user = await Users.removeUser(req.params.id, req.body);
     if (user) {
