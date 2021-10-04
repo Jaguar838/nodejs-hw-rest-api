@@ -2,13 +2,24 @@ const express = require("express");
 const router = express.Router();
 
 const Users = require("../../model");
-// const patch = require("patch");
+
 // const { validateUser, validateID, validate?} = require('./validation')
 
+// Получаем список юзеров из json
 router.get("/", async (req, res, next) => {
   try {
     const users = await Users.listUsers();
-    res.json({ status: "succes", code: 200, data: { users } });
+    res.status(200).json({ status: "succes", code: 200, data: { users } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Добавляем одного юзера в файл json
+router.post("/", async (req, res, next) => {
+  try {
+    const user = await Users.addUser(req.body);
+    res.status(201).json({ status: "succes", code: 200, data: { user } });
   } catch (error) {
     next(error);
   }
@@ -22,13 +33,6 @@ router.get("/", async (req, res, next) => {
 //         }
 //     } catch (error) {
 
-//     }
-// });
-
-// router.post("/", async (req, res, next) => {
-//     try {
-//         const user = await Users.addContact(req.body)
-//         res.status(201)
 //     }
 // });
 

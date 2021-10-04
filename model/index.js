@@ -6,6 +6,18 @@ const listUsers = async () => {
   return await db.read();
 };
 
+const addUser = async (body) => {
+  const users = await db.read();
+  const newUser = {
+    id: crypto.randomUUID(),
+    isFavorite: false,
+    ...body,
+  };
+  users.push(newUser);
+  await db.write(users);
+  return newUser;
+};
+
 // const getUserId = async (UserId) => {
 // const users = await db.read();
 //   const [user] = users.filter((user) => user.id === id);
@@ -18,20 +30,6 @@ const listUsers = async () => {
 //   if (index !== -1) {
 
 //   }};
-
-// const addUser = async (body) => {
-//   const users = await db.read();
-//   const newUser = {
-//     id: crypto.randomUUID(),
-//     isVaccinated: false,
-//     ...body,
-//     // ...(body.isVaccinated ? {} : { isVaccinated: false }),
-//     // используеться если прийдет или не прийдет поле с фронта
-//   };
-//   users.push(newUser);
-//   await db.write(users);
-//   return newUser;
-// };
 
 // const updateUser = async (UserId, body) => {
 //   const users = await db.read();
@@ -46,8 +44,8 @@ const listUsers = async () => {
 
 module.exports = {
   listUsers,
+  addUser,
   // getUserId,
   // removeUser,
-  // addUser,
   // updateUser,
 };
