@@ -20,6 +20,18 @@ const addUser = async (body) => {
   return newUser;
 };
 
+const updateUser = async (id, body) => {
+  const users = await db.read();
+  const index = users.findIndex((user) => user.id === id);
+  if (index !== -1) {
+    const user = users[index];
+    users[index] = { ...user, ...body };
+    return users[index];
+  }
+  return null; // ничего нет
+  // undefined - нельзя делать, это не от нас зависит(запрос не пришел или чего-то не отправили).
+};
+
 // const getUserId = async (UserId) => {
 // const users = await db.read();
 //   const [user] = users.filter((user) => user.id === id);
@@ -33,21 +45,10 @@ const addUser = async (body) => {
 
 //   }};
 
-// const updateUser = async (UserId, body) => {
-//   const users = await db.read();
-//   const index = users.findIndex((user) => user.id === id);
-//   if (index !== -1) {
-//     const user = users[index]
-//     users[index] = { ...user, ...}
-//     return null
-//   }
-//   return
-// };
-
 module.exports = {
   listUsers,
   addUser,
+  updateUser,
   // getUserId,
   // removeUser,
-  // updateUser,
 };
