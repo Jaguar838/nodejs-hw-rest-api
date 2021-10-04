@@ -42,19 +42,53 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-// router.get("/:id", async (req, res, next) => {
-//     try {
-//         const user = await Users.getUserId(req.param.id)
-//         if (user) {
+// Обновляем статус пользователя
+router.patch("/:id/favorite/", async (req, res, next) => {
+  try {
+    const user = await Users.updateUser(req.params.id, req.body);
+    if (user) {
+      return res
+        .status(200)
+        .json({ status: "succes", code: 200, data: { user } });
+    }
+    return res
+      .status(404)
+      .json({ status: "error", code: 404, message: "Not Found" });
+  } catch (error) {
+    next(error);
+  }
+});
 
-//         }
-//     } catch (error) {
+router.get("/:id", async (req, res, next) => {
+  try {
+    const user = await Users.getUserId(req.params.id, req.body);
+    if (user) {
+      return res
+        .status(200)
+        .json({ status: "succes", code: 200, data: { user } });
+    }
+    return res
+      .status(404)
+      .json({ status: "error", code: 404, message: "Not Found" });
+  } catch (error) {
+    next(error);
+  }
+});
 
-//     }
-// });
-
-// router.delete('/:id', async (req, res, next) => {
-//     res.json({'template message'})
-// })
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const user = await Users.removeUser(req.params.id, req.body);
+    if (user) {
+      return res
+        .status(200)
+        .json({ status: "succes", code: 200, data: { user } });
+    }
+    return res
+      .status(404)
+      .json({ status: "error", code: 404, message: "Not Found" });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

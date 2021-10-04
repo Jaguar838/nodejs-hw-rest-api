@@ -32,23 +32,27 @@ const updateUser = async (id, body) => {
   // undefined - нельзя делать, это не от нас зависит(запрос не пришел или чего-то не отправили).
 };
 
-// const getUserId = async (UserId) => {
-// const users = await db.read();
-//   const [user] = users.filter((user) => user.id === id);
-//   return user
-// };
+const getUserId = async (id) => {
+  const users = await db.read();
+  const [user] = users.filter((user) => user.id === id);
+  return user;
+};
 
-// const removeUser = async (UserId) => {
-//  const users = await db.read();
-//   const index = users.findIndex((user) => user.id === id);
-//   if (index !== -1) {
-
-//   }};
+const removeUser = async (id) => {
+  const users = await db.read();
+  const index = users.findIndex((user) => user.id === id);
+  if (index !== -1) {
+    const [result] = users.splice(index, 1);
+    await db.write(users);
+    return result;
+  }
+  return null;
+};
 
 module.exports = {
   listUsers,
   addUser,
   updateUser,
-  // getUserId,
-  // removeUser,
+  getUserId,
+  removeUser,
 };
