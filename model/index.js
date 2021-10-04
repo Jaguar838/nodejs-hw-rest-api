@@ -10,7 +10,9 @@ const addUser = async (body) => {
   const users = await db.read();
   const newUser = {
     id: crypto.randomUUID(),
-    isFavorite: false,
+    // isFavorite: false,
+    ...(body.isFavorite ? {} : { isFavorite: false }),
+    // если вообще не знаешь прийдет ли это поле
     ...body,
   };
   users.push(newUser);
