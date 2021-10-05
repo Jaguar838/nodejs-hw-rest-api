@@ -1,5 +1,8 @@
-node_modules
 .dccache
-yarn.lock
+node_modules
+
 .env
 *.log
+*.zip
+
+yarn.lock
