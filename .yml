@@ -1,0 +1,2 @@
+- name: Vault Secrets
+  uses: hashicorp/vault-action@v2.3.1
