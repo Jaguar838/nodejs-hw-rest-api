@@ -2,3 +2,4 @@ node_modules
 .dccache
 yarn.lock
 .env
+*.log
