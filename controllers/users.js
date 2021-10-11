@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const Users = require("../../model");
+const Users = require("../repository");
 
 const {
   validateUser,
   validateUserPatch,
   validateUserId,
-} = require("./validation");
+} = require("../routes/api/validation");
 
 // Получаем список юзеров из json
 router.get("/", async (req, res, next) => {

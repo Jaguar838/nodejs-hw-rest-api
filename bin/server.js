@@ -1,4 +1,4 @@
-const { required } = require("joi");
+// const db = require("../config/db");
 const app = require("../app");
 
 const result = require("dotenv").config();
@@ -6,7 +6,7 @@ const result = require("dotenv").config();
 if (result.error) {
   throw result.error;
 }
-console.log(result.parsed); //{PORT: "3000;";}
+console.log(result.parsed);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

@@ -1,0 +1,57 @@
+[{
+  "_id": {
+    "$oid": "6163f793a43f09371366c048"
+  },
+  "isFavorite": false,
+  "name": "Allen Raymond",
+  "email": "nulla.ante@vestibul.co.uk",
+  "phone": "(992) 914-3792"
+},{
+  "_id": {
+    "$oid": "6163f793a43f09371366c049"
+  },
+  "isFavorite": true,
+  "name": "Chaim Lewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685"
+},{
+  "_id": {
+    "$oid": "6163f793a43f09371366c04a"
+  },
+  "isFavorite": true,
+  "name": "ChaimLewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685"
+},{
+  "_id": {
+    "$oid": "6163f793a43f09371366c04b"
+  },
+  "isFavorite": true,
+  "name": "Chaim Lewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685"
+},{
+  "_id": {
+    "$oid": "6163f793a43f09371366c04c"
+  },
+  "isFavorite": true,
+  "name": "ChaimLewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685"
+},{
+  "_id": {
+    "$oid": "6163f793a43f09371366c04d"
+  },
+  "isFavorite": true,
+  "name": "ChaimLewis        ",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685"
+},{
+  "_id": {
+    "$oid": "6163f793a43f09371366c04e"
+  },
+  "isFavorite": true,
+  "name": "Chaim    Lewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685"
+}]

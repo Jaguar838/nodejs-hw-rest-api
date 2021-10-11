@@ -1,15 +1,21 @@
-const crypto = require("crypto");
-const DB = require("./db");
-const db = new DB("users.json");
+const { ObjectId } = require("mongodb");
+const db = require("../bin/config/db");
+
+const getCollection = async (db, name) => {
+  const client = await db;
+  const collection = await client.db().collection(name);
+  return collection;
+};
 
 const listUsers = async () => {
-  return await db.read();
+  const collection = await getCollection(db, "contacts");
+  const results = await collection.find({}).toArray();
+  return results;
 };
 
 const addUser = async (body) => {
   const users = await db.read();
   const newUser = {
-    id: crypto.randomUUID(),
     // isFavorite: false,
     ...(body.isFavorite ? {} : { isFavorite: false }),
     // если вообще не знаешь прийдет ли это поле
