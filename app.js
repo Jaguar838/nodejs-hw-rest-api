@@ -1,10 +1,9 @@
+import contactsRouter from "./routes/contacts/contacts";
+import usersRouter from "./routes/users/user";
 import express, { json } from "express";
 import logger from "morgan";
 import cors from "cors";
 const helmet = require("helmet");
-
-import contactsRouter from "./routes/contacts/contacts";
-import usersRouter from "./routes/users/user";
 
 const app = express();
 app.use(helmet());
