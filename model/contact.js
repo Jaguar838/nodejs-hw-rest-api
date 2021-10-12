@@ -1,5 +1,6 @@
-const { Shema, model } = require("mongoose");
-const contactSchema = {
+const { Schema, model } = require("mongoose");
+
+const contactSchema = new Schema {
   name: {
     type: String,
     // unique: true,

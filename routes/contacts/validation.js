@@ -1,4 +1,5 @@
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const patterns = {
   name: /[a-zA-Zа-яА-Я]*$/,
@@ -18,7 +19,7 @@ const schemaUserPatch = Joi.object({
 });
 
 const schemaUserId = {
-  id: Joi.string().pattern(patterns.id).required(),
+  id: Joi.objectId().required(),
 };
 
 const validate = async (schema, obj, res, next) => {

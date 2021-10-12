@@ -10,7 +10,7 @@
 
 Створи аккаунт на [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). Після чого в акаунті створи новий проект і настрій **бесплатный кластер**. Під час налаштування кластера вибери провавйдера і регіон як на скріншоті нижче. Якщо вибрати занадто віддалений регіон, швидкість відповіді сервера буде довше.
 
-![atlas cluster setup](./atlas-cluster.jpg)
+![atlas cluster setup](./assets/img/atlas-cluster.jpg)
 
 ## Крок 2
 
@@ -24,11 +24,11 @@
 
 Через Compass створи базу даних `db-contacts` і в ній колекцію `contacts`. Візьми [ссылка на json](./contacts) і за допомогою Compass наповни колекцію `contacts` (зроби імпорт) його вмістом.
 
-![data](./json-data.png)
+![data](./assets/img/json-data.png)
 
 Якщо ви все зробили правильно, дані повинні з'явитися у вашій базі в колекції `contacts`
 
-![data](./mongo-data.png)
+![data](./assets/img/mongo-data.png)
 
 ## Крок 4
 
@@ -69,9 +69,8 @@
 
 - Отримує параметр `contactId`
 - Отримує `body` в json-форматі c оновленням поля` favorite`
-- Якщо `body` немає, повертає json з ключем` { "message": "missing field favorite"} `і статусом` 400`
+- Якщо `body` немає, повертає json з ключем`{ "message": "missing field favorite"}`і статусом` 400`
 - Якщо з `body` все добре, викликає функцію` updateStatusContact (contactId, body)` (напиши її) для поновлення контакту в базі
 - За результатом роботи функції повертає оновлений об'єкт контакту і статусом `200`. В іншому випадку, повертає json з ключем `" message ":" Not found "` і статусом `404`
-
 
 Для роута `POST /api/contacts` внеси зміни: якщо поле `favorite` не вказали в `body`, то при збереженні в базу нового контакту, зроби поле `favorite` рівним за замовчуванням `false`
