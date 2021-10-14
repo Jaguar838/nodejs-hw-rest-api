@@ -4,6 +4,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 const helmet = require("helmet");
+const boolParser = require("express-query-boolean");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 // parse application/json
 app.use(express.json({ limit: 10000 }));
+app.use(boolParser());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
