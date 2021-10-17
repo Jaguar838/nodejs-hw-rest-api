@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const { HttpCode } = require("../config/constants");
 const Users = require("../repository");
 
 const {
@@ -14,7 +14,9 @@ router.get("/", async (req, res, next) => {
   try {
     console.log(req.method);
     const users = await Users.listUsers();
-    res.status(200).json({ status: "succes", code: 200, data: { users } });
+    res
+      .status(200)
+      .json({ status: "succes", code: HttpCode.OK, data: { users } });
   } catch (error) {
     next(error);
   }
@@ -25,7 +27,9 @@ router.post("/", validateUser, async (req, res, next) => {
   try {
     console.log(req.method);
     const user = await Users.addUser(req.body);
-    res.status(201).json({ status: "succes", code: 201, data: { user } });
+    res
+      .status(201)
+      .json({ status: "succes", code: HttpCode.CREATED, data: { user } });
   } catch (error) {
     next(error);
   }
@@ -39,11 +43,13 @@ router.put("/:id", validateUserId, async (req, res, next) => {
     if (user) {
       return res
         .status(200)
-        .json({ status: "succes", code: 200, data: { user } });
+        .json({ status: "succes", code: HttpCode.OK, data: { user } });
     }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: "error",
+      code: HttpCode.NOT_FOUND,
+      message: "Not Found",
+    });
   } catch (error) {
     next(error);
   }
@@ -57,11 +63,13 @@ router.patch("/:id/favorite/", validateUserPatch, async (req, res, next) => {
     if (user) {
       return res
         .status(200)
-        .json({ status: "succes", code: 200, data: { user } });
+        .json({ status: "succes", code: HttpCode.OK, data: { user } });
     }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: "error",
+      code: HttpCode.NOT_FOUND,
+      message: "Not Found",
+    });
   } catch (error) {
     next(error);
   }
@@ -74,11 +82,13 @@ router.get("/:id", validateUserId, async (req, res, next) => {
     if (user) {
       return res
         .status(200)
-        .json({ status: "succes", code: 200, data: { user } });
+        .json({ status: "succes", code: HttpCode.OK, data: { user } });
     }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: "error",
+      code: HttpCode.NOT_FOUND,
+      message: "Not Found",
+    });
   } catch (error) {
     next(error);
   }
@@ -91,11 +101,13 @@ router.delete("/:id", validateUserId, async (req, res, next) => {
     if (user) {
       return res
         .status(200)
-        .json({ status: "succes", code: 200, data: { user } });
+        .json({ status: "succes", code: HttpCode.OK, data: { user } });
     }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: "error",
+      code: HttpCode.NOT_FOUND,
+      message: "Not Found",
+    });
   } catch (error) {
     next(error);
   }

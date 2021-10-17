@@ -1,5 +1,5 @@
-import { then } from "./db.js";
-import { listen } from "../app";
+const db = require("../config/db");
+const app = require("../app");
 
 const result = require("dotenv").config();
 
@@ -10,8 +10,8 @@ console.log(result.parsed);
 
 const PORT = process.env.PORT;
 
-then(() => {
-  listen(PORT, () => {
+db.then(() => {
+  app.listen(PORT, () => {
     console.log(`Server running. Use our API on port: ${PORT}`);
   });
 }).catch((err) => {

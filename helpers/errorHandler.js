@@ -7,7 +7,11 @@ const wrapper = (fn) => async (req, res, next) => {
       case "ValidationError":
         res
           .status(400)
-          .json({ status: "error", code: 400, message: error.message });
+          .json({
+            status: "error",
+            code: HttpCode.BAD_REQUEST,
+            message: error.message,
+          });
         break;
       case "CustomError":
         res.status(error.status).json({

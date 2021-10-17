@@ -29,7 +29,7 @@ const validate = async (schema, obj, res, next) => {
   } catch (err) {
     res.status(400).json({
       status: "error",
-      code: 400,
+      code: HttpCode.BAD_REQUEST,
       message: `Field ${err.message.replace(/"/g, "")}`,
     });
   }

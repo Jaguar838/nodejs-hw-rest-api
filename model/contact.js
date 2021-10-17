@@ -27,7 +27,7 @@ const contactSchema = new Schema(
     timestamps: true,
     toJSON: {
       virtuals: true,
-      trsnsform: function (doc, ret) {
+      transform: function (doc, ret) {
         delete ret._id;
         return ret;
       },

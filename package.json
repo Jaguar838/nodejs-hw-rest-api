@@ -2,7 +2,6 @@
   "name": "hw04",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
@@ -10,6 +9,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^10.0.0",
@@ -23,6 +23,7 @@
     "mongoose": "^6.0.10",
     "mongoose-paginate-v2": "^1.4.2",
     "morgan": "1.10.0",
+    "passport": "^0.5.0",
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
