@@ -1,10 +1,8 @@
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
-const { HttpCode } = require("../config/constants");
+const HttpCode = require("../config/constants");
 
-// const patternPhone = "\\(\\d{3}\\) \\d{3}-\\d{4}";
-
-const schemaSignup = Joi.object({
+const schemaRegistration = Joi.object({
   name: Joi.string().min(1).max(30).optional(),
   email: Joi.string().email().required(),
   password: Joi.string().alphanum().min(8).required(),
@@ -34,8 +32,8 @@ const validate = async (schema, obj, res, next) => {
   }
 };
 
-module.exports.validateSignup = async (req, res, next) => {
-  return await validate(schemaSignup, req.body, res, next);
+module.exports.validateRegistration = async (req, res, next) => {
+  return await validate(schemaRegistration, req.body, res, next);
 };
 
 module.exports.validateLogin = async (req, res, next) => {

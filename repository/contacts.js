@@ -43,7 +43,7 @@ const addContact = async (body) => {
   return await getContactId(result.insertedId);
 };
 
-const removeContact = async (id) => {
+const deleteContact = async (id) => {
   const collection = await getCollection(db, "contacts");
   const oid = new ObjectId(id);
   const { value: results } = await collection.findOneAndDelete({ _id: oid });
@@ -55,5 +55,5 @@ module.exports = {
   addContact,
   updateContact,
   getContactId,
-  removeContact,
+  deleteContact,
 };

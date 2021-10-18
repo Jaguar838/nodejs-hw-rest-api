@@ -1,116 +1,66 @@
-const express = require("express");
-const router = express.Router();
-const { HttpCode } = require("../config/constants");
+const HttpCode = require("../config/constants");
 const Contacts = require("../repository/contacts");
-
-const {
-  validateContact,
-  validateContactPatch,
-  validateContactId,
-} = require("../routes/contacts/validation");
+const { CustomError } = require("../helpers/customError");
 
 // Получаем список контактов
-router.get("/", async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contacts = await Contacts.listContacts();
-    res
+const getContacts = async (req, res) => {
+  const userId = req.user._id;
+  console.log(userId, req.method);
+  const contacts = await Contacts.listContacts(userId, req.query);
+  res.json({ status: "succes", code: HttpCode.OK, data: { ...contacts } });
+};
+
+const getContact = async (req, res, next) => {
+  const userId = req.user._id;
+  console.log(userId, req.method);
+  const contact = await Contacts.getContactId(req.params.id, userId);
+  if (contact) {
+    return res
       .status(HttpCode.OK)
-      .json({ status: "succes", code: HttpCode.OK, data: { contacts } });
-  } catch (error) {
-    next(error);
+      .json({ status: "succes", code: HttpCode.OK, data: { contact } });
   }
-});
+  throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
+};
 
 // Добавляем контакт
-router.post("/", validateContact, async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contact = await Contacts.addContact(req.body);
-    res
-      .status(HttpCode.CREATED)
-      .json({ status: "succes", code: HttpCode.CREATED, data: { contact } });
-  } catch (error) {
-    next(error);
-  }
-});
+const addContact = async (req, res, next) => {
+  const userId = req.user._id;
+  console.log(userId, req.method);
+  const contact = await Contacts.addContact({ ...req.body, owner: userId });
+  res
+    .status(HttpCode.CREATED)
+    .json({ status: "succes", code: HttpCode.CREATED, data: { contact } });
+};
 
 // Обновляем поля контакта
-router.put("/:id", validateContactId, async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contact = await Contacts.updateContact(req.params.id, req.body);
-    if (contact) {
-      return res
-        .status(HttpCode.OK)
-        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
-    }
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: "error",
-      code: HttpCode.NOT_FOUND,
-      message: "Not Found",
-    });
-  } catch (error) {
-    next(error);
+const updateContact = async (req, res, next) => {
+  const userId = req.user._id;
+  console.log(userId, req.method);
+  const contact = await Contacts.updateContact(req.params.id, req.body, userId);
+  if (contact) {
+    return res
+      .status(HttpCode.OK)
+      .json({ status: "succes", code: HttpCode.OK, data: { contact } });
   }
-});
+  throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
+};
 
-// Обновляем статус контакта
-router.patch("/:id/favorite/", validateContactPatch, async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contact = await Contacts.updateContact(req.params.id, req.body);
-    if (contact) {
-      return res
-        .status(HttpCode.OK)
-        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
-    }
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: "error",
-      code: HttpCode.NOT_FOUND,
-      message: "Not Found",
-    });
-  } catch (error) {
-    next(error);
+const deleteContact = async (req, res, next) => {
+  const userId = req.user._id;
+  console.log(userId, req.method);
+  const contact = await Contacts.deleteContact(req.params.id, userId);
+  if (contact) {
+    return res
+      .status(HttpCode.OK)
+      .json({ status: "succes", code: HttpCode.OK, data: { contact } });
   }
-});
+  throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
+};
 
-router.get("/:id", validateContactId, async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contact = await Contacts.getContactId(req.params.id, req.body);
-    if (contact) {
-      return res
-        .status(HttpCode.OK)
-        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
-    }
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: "error",
-      code: HttpCode.NOT_FOUND,
-      message: "Not Found",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:id", validateContactId, async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contact = await Contacts.removeContact(req.params.id, req.body);
-    if (contact) {
-      return res
-        .status(HttpCode.OK)
-        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
-    }
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: "error",
-      code: HttpCode.NOT_FOUND,
-      message: "Not Found",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-module.exports = router;
+module.exports = {
+  getContacts,
+  getContact,
+  addContact,
+  updateContact,
+  deleteContact,
+};

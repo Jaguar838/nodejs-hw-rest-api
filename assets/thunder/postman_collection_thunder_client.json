@@ -1,191 +1,173 @@
 {
-	"info": {
-		"_postman_id": "424c6e8e-872e-489c-9888-3382e4fc91ed",
-		"name": "Node 31 group",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Contacts",
-			"item": []
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get list users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get user by ID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\"name\": \"Kennedy LaneBy\",\r\n\"email\": \"mattis_Cras@nonenimMauris.net\",\r\n\"phone\": \"(542) 451-7038-5555\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/users/2be4f8d9-2c79-4863-b981-f012e5b54fc5",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users",
-								"2be4f8d9-2c79-4863-b981-f012e5b54fc5"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Allen Raymond\",\r\n    \"email\": \"nulla.ante@vestibul.co.uk\",\r\n    \"phone\": \"(992) 914-3792\",\r\n    \"isFavorite\": false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update User",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\"name\": \"Kennedy Lane\",\r\n\"email\": \"mattis.Cras@nonenimMauris.net\",\r\n\"phone\": \"(542) 451-7038\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/users/2be4f8d9-2c79-4863-b981-f012e5b54fc5",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users",
-								"2be4f8d9-2c79-4863-b981-f012e5b54fc5"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update status User",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"isFavorite\": false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/users/2be4f8d9-2c79-4863-b981-f012e5b54fc5/favorite",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users",
-								"2be4f8d9-2c79-4863-b981-f012e5b54fc5",
-								"favorite"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete user by ID",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/users/2be4f8d9-2c79-4863-b981-f012e5b54fc5",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users",
-								"2be4f8d9-2c79-4863-b981-f012e5b54fc5"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "424c6e8e-872e-489c-9888-3382e4fc91ed",
+    "name": "Node 31 group",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": []
+    },
+    {
+      "name": "contacts",
+      "item": [
+        {
+          "name": "Get list contacts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/contacts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "contacts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get contact by ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"name\": \"Kennedy LaneBy\",\r\n\"email\": \"mattis_Cras@nonenimMauris.net\",\r\n\"phone\": \"(542) 451-7038-5555\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/contacts/2be4f8d9-2c79-4863-b981-f012e5b54fc5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "contacts",
+                "2be4f8d9-2c79-4863-b981-f012e5b54fc5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create contact",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Allen Raymond\",\r\n    \"email\": \"nulla.ante@vestibul.co.uk\",\r\n    \"phone\": \"(992) 914-3792\",\r\n    \"isFavorite\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/contacts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "contacts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update contact",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"name\": \"Kennedy Lane\",\r\n\"email\": \"mattis.Cras@nonenimMauris.net\",\r\n\"phone\": \"(542) 451-7038\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/contacts/2be4f8d9-2c79-4863-b981-f012e5b54fc5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "contacts",
+                "2be4f8d9-2c79-4863-b981-f012e5b54fc5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update status contact",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isFavorite\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/contacts/2be4f8d9-2c79-4863-b981-f012e5b54fc5/favorite",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "contacts",
+                "2be4f8d9-2c79-4863-b981-f012e5b54fc5",
+                "favorite"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete contact by ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/contacts/2be4f8d9-2c79-4863-b981-f012e5b54fc5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "contacts",
+                "2be4f8d9-2c79-4863-b981-f012e5b54fc5"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }

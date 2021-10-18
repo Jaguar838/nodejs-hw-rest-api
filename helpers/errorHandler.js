@@ -1,4 +1,4 @@
-const { HttpCode } = require("../config/constants");
+const HttpCode = require("../config/constants");
 const wrapper = (fn) => async (req, res, next) => {
   try {
     const result = await fn(req, res, next);

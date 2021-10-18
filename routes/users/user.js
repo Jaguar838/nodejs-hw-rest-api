@@ -1,10 +1,25 @@
 const express = require("express");
 const router = express.Router();
-
-const { registration, login, logout } = require("../../controllers/users");
 const guard = require("../../helpers/guard");
 const loginLimit = require("../../helpers/rate-limit-login");
-router.post("/registration", registration);
-router.post("/login", loginLimit, login);
-router.post("/login", guard, logout);
+
+const {
+  registration,
+  login,
+  logout,
+  current,
+  update,
+} = require("../../controllers/users");
+
+const {
+  validateRegistration,
+  validateLogin,
+  validateSubscriptionUpdate,
+} = require("./validation");
+
+router.post("/registration", validateRegistration, registration);
+router.post("/login", loginLimit, validateLogin, login);
+router.post("/logout", guard, logout);
+router.get("/current", guard, current);
+router.patch("/", guard, validateSubscriptionUpdate, update);
 module.exports = router;

@@ -5,7 +5,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
 const boolParser = require("express-query-boolean");
-const { HttpCode } = require("../config/constants");
+const HttpCode = require("./config/constants");
 
 const app = express();
 app.use(helmet());

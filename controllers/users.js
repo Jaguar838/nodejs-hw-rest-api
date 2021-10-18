@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
-const { HttpCode } = require("../config/constants");
+const HttpCode = require("../config/constants");
 const { CustomError } = require("../helpers/customError");
 require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -70,7 +70,7 @@ const logout = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({ test: "test" });
 };
 
-const currentController = async (req, res, next) => {
+const current = async (req, res, next) => {
   const userId = req.user._id;
   const user = await Users.findById(userId);
   if (user) {
@@ -84,7 +84,7 @@ const currentController = async (req, res, next) => {
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
 
-const updateController = async (req, res, next) => {
+const update = async (req, res, next) => {
   const userId = req.user._id;
   const user = await Users.updateSubscription(userId, req.body);
   return res.status(HttpCode.OK).json({
@@ -101,6 +101,6 @@ module.exports = {
   registration,
   login,
   logout,
-  currentController,
-  updateController,
+  current,
+  update,
 };
