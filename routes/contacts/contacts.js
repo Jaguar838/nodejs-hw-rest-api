@@ -22,6 +22,6 @@ router.post('/',validateUser, addContact)
 
 router.delete('/:contactId',validateUserId, deleteContact)
 
-router.patch('/:contactId',validateUserId, updateContact)
+router.patch('/:contactId/favorite/',validateUserId, validateUserPatch, updateContact)
 
 module.exports = router
