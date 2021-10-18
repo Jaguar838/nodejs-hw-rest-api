@@ -22,7 +22,7 @@ router.post('/',validateUser, addContact)
 
 router.delete('/:contactId',validateUserId, deleteContact)
 
-router.put("/:contactId", validateUserId, validateUser, changeContact);
+router.put("/:contactId", validateUserId, validateUser, updateContact);
 
 router.patch('/:contactId/favorite/',validateUserId, validateUserPatch, updateContact)
 
