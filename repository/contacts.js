@@ -7,13 +7,13 @@ const getCollection = async (db, name) => {
   return collection;
 };
 
-const listUsers = async () => {
+const listContacts = async () => {
   const collection = await getCollection(db, "contacts");
   const results = await collection.find({}).toArray();
   return results;
 };
 
-const updateUser = async (id, body) => {
+const updateContact = async (id, body) => {
   const collection = await getCollection(db, "contacts");
   const oid = new ObjectId(id);
   const { value: result } = await collection.findOneAndUpdate(
@@ -24,26 +24,26 @@ const updateUser = async (id, body) => {
   return result;
 };
 
-const getUserId = async (id) => {
+const getContactId = async (id) => {
   const collection = await getCollection(db, "contacts");
   const oid = new ObjectId(id);
   const [result] = await collection.find({ _id: oid }).toArray();
   return result;
 };
 
-const addUser = async (body) => {
-  const newUser = {
+const addContact = async (body) => {
+  const newContact = {
     // isFavorite: false,
     ...(body.isFavorite ? {} : { isFavorite: false }),
     // если вообще не знаешь прийдет ли это поле
     ...body,
   };
   const collection = await getCollection(db, "contacts");
-  const result = await collection.insertOne(newUser);
-  return await getUserId(result.insertedId);
+  const result = await collection.insertOne(newContact);
+  return await getContactId(result.insertedId);
 };
 
-const removeUser = async (id) => {
+const removeContact = async (id) => {
   const collection = await getCollection(db, "contacts");
   const oid = new ObjectId(id);
   const { value: results } = await collection.findOneAndDelete({ _id: oid });
@@ -51,9 +51,9 @@ const removeUser = async (id) => {
 };
 
 module.exports = {
-  listUsers,
-  addUser,
-  updateUser,
-  getUserId,
-  removeUser,
+  listContacts,
+  addContact,
+  updateContact,
+  getContactId,
+  removeContact,
 };

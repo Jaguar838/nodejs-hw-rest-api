@@ -1,49 +1,49 @@
 const express = require("express");
 const router = express.Router();
 const { HttpCode } = require("../config/constants");
-const Users = require("../repository");
+const Contacts = require("../repository/contacts");
 
 const {
-  validateUser,
-  validateUserPatch,
-  validateUserId,
+  validateContact,
+  validateContactPatch,
+  validateContactId,
 } = require("../routes/contacts/validation");
 
-// Получаем список юзеров из json
+// Получаем список контактов
 router.get("/", async (req, res, next) => {
   try {
     console.log(req.method);
-    const users = await Users.listUsers();
+    const contacts = await Contacts.listContacts();
     res
-      .status(200)
-      .json({ status: "succes", code: HttpCode.OK, data: { users } });
+      .status(HttpCode.OK)
+      .json({ status: "succes", code: HttpCode.OK, data: { contacts } });
   } catch (error) {
     next(error);
   }
 });
 
-// Добавляем одного юзера в файл json
-router.post("/", validateUser, async (req, res, next) => {
+// Добавляем контакт
+router.post("/", validateContact, async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.addUser(req.body);
+    const contact = await Contacts.addContact(req.body);
     res
-      .status(201)
-      .json({ status: "succes", code: HttpCode.CREATED, data: { user } });
+      .status(HttpCode.CREATED)
+      .json({ status: "succes", code: HttpCode.CREATED, data: { contact } });
   } catch (error) {
     next(error);
   }
 });
 
-// Обновляем поля юзера
-router.put("/:id", validateUserId, async (req, res, next) => {
+// Обновляем поля контакта
+router.put("/:id", validateContactId, async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.updateUser(req.params.id, req.body);
-    if (user) {
+    const contact = await Contacts.updateContact(req.params.id, req.body);
+    if (contact) {
       return res
-        .status(200)
-        .json({ status: "succes", code: HttpCode.OK, data: { user } });
+        .status(HttpCode.OK)
+        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
     }
     return res.status(HttpCode.NOT_FOUND).json({
       status: "error",
@@ -55,15 +55,15 @@ router.put("/:id", validateUserId, async (req, res, next) => {
   }
 });
 
-// Обновляем статус пользователя
-router.patch("/:id/favorite/", validateUserPatch, async (req, res, next) => {
+// Обновляем статус контакта
+router.patch("/:id/favorite/", validateContactPatch, async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.updateUser(req.params.id, req.body);
-    if (user) {
+    const contact = await Contacts.updateContact(req.params.id, req.body);
+    if (contact) {
       return res
-        .status(200)
-        .json({ status: "succes", code: HttpCode.OK, data: { user } });
+        .status(HttpCode.OK)
+        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
     }
     return res.status(HttpCode.NOT_FOUND).json({
       status: "error",
@@ -75,14 +75,14 @@ router.patch("/:id/favorite/", validateUserPatch, async (req, res, next) => {
   }
 });
 
-router.get("/:id", validateUserId, async (req, res, next) => {
+router.get("/:id", validateContactId, async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.getUserId(req.params.id, req.body);
-    if (user) {
+    const contact = await Contacts.getContactId(req.params.id, req.body);
+    if (contact) {
       return res
-        .status(200)
-        .json({ status: "succes", code: HttpCode.OK, data: { user } });
+        .status(HttpCode.OK)
+        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
     }
     return res.status(HttpCode.NOT_FOUND).json({
       status: "error",
@@ -94,14 +94,14 @@ router.get("/:id", validateUserId, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", validateUserId, async (req, res, next) => {
+router.delete("/:id", validateContactId, async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.removeUser(req.params.id, req.body);
-    if (user) {
+    const contact = await Contacts.removeContact(req.params.id, req.body);
+    if (contact) {
       return res
-        .status(200)
-        .json({ status: "succes", code: HttpCode.OK, data: { user } });
+        .status(HttpCode.OK)
+        .json({ status: "succes", code: HttpCode.OK, data: { contact } });
     }
     return res.status(HttpCode.NOT_FOUND).json({
       status: "error",
