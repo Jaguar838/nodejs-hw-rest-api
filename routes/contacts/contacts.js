@@ -1,5 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const {
+  validateUser,
+  validateUserPatch,
+  validateUserId,
+} = require("./validation");
 
 router.get('/', async (req, res, next) => {
   res.json({ message: 'template message' })
