@@ -3,12 +3,6 @@ const router = express.Router();
 
 const Users = require("../repository");
 
-const {
-  validateUser,
-  validateUserPatch,
-  validateUserId,
-} = require("../routes/contacts/validation");
-
 // Получаем список юзеров из json
 router.get("/", async (req, res, next) => {
   try {
@@ -21,7 +15,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // Добавляем одного юзера в файл json
-router.post("/", validateUser, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     console.log(req.method);
     const user = await Users.addUser(req.body);
@@ -32,7 +26,7 @@ router.post("/", validateUser, async (req, res, next) => {
 });
 
 // Обновляем поля юзера
-router.put("/:id", validateUserId, async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     console.log(req.method);
     const user = await Users.updateUser(req.params.id, req.body);
@@ -50,7 +44,7 @@ router.put("/:id", validateUserId, async (req, res, next) => {
 });
 
 // Обновляем статус пользователя
-router.patch("/:id/favorite/", validateUserPatch, async (req, res, next) => {
+router.patch("/:id/favorite/", async (req, res, next) => {
   try {
     console.log(req.method);
     const user = await Users.updateUser(req.params.id, req.body);
@@ -67,7 +61,7 @@ router.patch("/:id/favorite/", validateUserPatch, async (req, res, next) => {
   }
 });
 
-router.get("/:id", validateUserId, async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     console.log(req.method);
     const user = await Users.getUserId(req.params.id, req.body);
@@ -84,7 +78,7 @@ router.get("/:id", validateUserId, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", validateUserId, async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     console.log(req.method);
     const user = await Users.removeUser(req.params.id, req.body);
