@@ -44,7 +44,7 @@ const updateContact = async (req, res, next) => {
   }
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
-
+// Удаляем контакт
 const deleteContact = async (req, res, next) => {
   const userId = req.user._id;
   console.log(userId, req.method);

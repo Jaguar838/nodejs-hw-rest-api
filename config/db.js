@@ -18,6 +18,7 @@ mongoose.connection.on("error", (err) => {
 });
 
 //  disconnected
+
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
   console.log("Connection for DB closed");
