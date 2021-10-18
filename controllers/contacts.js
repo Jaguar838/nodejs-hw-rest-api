@@ -1,13 +1,11 @@
-const express = require("express");
-
-const Users = require("../repository");
+const Contacts = require("../repository/contacts");
 
 // Получаем список юзеров из db
-// router.get("/", 
+// router.get("/",
 const getContacts = async (req, res, next) => {
   try {
     console.log(req.method);
-    const users = await Users.listUsers();
+    const users = await Contacts.listContacts();
     res.status(200).json({ status: "succes", code: 200, data: { users } });
   } catch (error) {
     next(error);
@@ -15,11 +13,11 @@ const getContacts = async (req, res, next) => {
 };
 
 // Добавляем одного юзера в db
-// router.post("/", 
-const getContact = async (req, res, next) => {
+// router.post("/",
+const addContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.addUser(req.body);
+    const user = await Contacts.addContact(req.body);
     res.status(201).json({ status: "succes", code: 201, data: { user } });
   } catch (error) {
     next(error);
@@ -27,11 +25,11 @@ const getContact = async (req, res, next) => {
 };
 
 // Обновляем поля юзера
-// router.put("/:id", 
+// router.put("/:id",
 const updateContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.updateUser(req.params.id, req.body);
+    const user = await Contacts.updateContact(req.params.id, req.body);
     if (user) {
       return res
         .status(200)
@@ -49,7 +47,7 @@ const updateContact = async (req, res, next) => {
 // router.patch("/:id/favorite/", async (req, res, next) => {
 //   try {
 //     console.log(req.method);
-//     const user = await Users.updateUser(req.params.id, req.body);
+//     const user = await Contacts.updateContact(req.params.id, req.body);
 //     if (user) {
 //       return res
 //         .status(200)
@@ -63,11 +61,11 @@ const updateContact = async (req, res, next) => {
 //   }
 // });
 
-// router.get("/:id", 
+// router.get("/:id",
 const getContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.getUserId(req.params.id, req.body);
+    const user = await Contacts.getContactId(req.params.id, req.body);
     if (user) {
       return res
         .status(200)
@@ -81,11 +79,11 @@ const getContact = async (req, res, next) => {
   }
 };
 
-// router.delete("/:id", 
+// router.delete("/:id",
 const deleteContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Users.removeUser(req.params.id, req.body);
+    const user = await Contacts.removeContact(req.params.id, req.body);
     if (user) {
       return res
         .status(200)

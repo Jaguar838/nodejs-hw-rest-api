@@ -1,59 +1,38 @@
-const { ObjectId } = require("mongodb");
-const db = require("../bin/config/db");
+const Contact = require("../model/contact");
 
-const getCollection = async (db, name) => {
-  const client = await db;
-  const collection = await client.db().collection(name);
-  return collection;
-};
-
-const listUsers = async () => {
-  const collection = await getCollection(db, "contacts");
-  const results = await collection.find({}).toArray();
+const listContacts = async () => {
+  const results = await Contact.find({});
   return results;
 };
 
-const updateUser = async (id, body) => {
-  const collection = await getCollection(db, "contacts");
-  const oid = new ObjectId(id);
-  const { value: result } = await collection.findOneAndUpdate(
-    { _id: oid },
-    { $set: body },
-    { returnDocument: "after" }
+const getContactId = async (id) => {
+  const result = await Contact.findById(id);
+  return result;
+};
+
+const updateContact = async (id, body) => {
+  const { value: result } = await Contact.findOneAndUpdate(
+    { _id: id },
+    { ...body },
+    { new: true }
   );
   return result;
 };
 
-const getUserId = async (id) => {
-  const collection = await getCollection(db, "contacts");
-  const oid = new ObjectId(id);
-  const [result] = await collection.find({ _id: oid }).toArray();
+const addContact = async (body) => {
+  const result = await Contact.create(body);
   return result;
 };
 
-const addUser = async (body) => {
-  const newUser = {
-    // isFavorite: false,
-    ...(body.isFavorite ? {} : { isFavorite: false }),
-    // если вообще не знаешь прийдет ли это поле
-    ...body,
-  };
-  const collection = await getCollection(db, "contacts");
-  const result = await collection.insertOne(newUser);
-  return await getUserId(result.insertedId);
-};
-
-const removeUser = async (id) => {
-  const collection = await getCollection(db, "contacts");
-  const oid = new ObjectId(id);
-  const { value: results } = await collection.findOneAndDelete({ _id: oid });
-  return results;
+const removeContact = async (id) => {
+  const result = await Contact.findByIdAndRemove({ _id: id });
+  return result;
 };
 
 module.exports = {
-  listUsers,
-  addUser,
-  updateUser,
-  getUserId,
-  removeUser,
+  listContacts,
+  addContact,
+  updateContact,
+  getContactId,
+  removeContact,
 };

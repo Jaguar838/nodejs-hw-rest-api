@@ -1,9 +1,9 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 const {
-  validateUser,
-  validateUserPatch,
-  validateUserId,
+  validateContact,
+  validateContactPatch,
+  validateContactId,
 } = require("./validation");
 
 const {
@@ -16,14 +16,19 @@ const {
 
 router.get("/", getContacts);
 
-router.get('/:contactId',validateUserId, getContact)
+router.get("/:contactId", validateContactId, getContact);
 
-router.post('/',validateUser, addContact)
+router.post("/", validateContact, addContact);
 
-router.delete('/:contactId',validateUserId, deleteContact)
+router.delete("/:contactId", validateContactId, deleteContact);
 
-router.put("/:contactId", validateUserId, validateUser, updateContact);
+router.put("/:contactId", validateContactId, validateContact, updateContact);
 
-router.patch('/:contactId/favorite/',validateUserId, validateUserPatch, updateContact)
+router.patch(
+  "/:contactId/favorite/",
+  validateContactId,
+  validateContactPatch,
+  updateContact
+);
 
-module.exports = router
+module.exports = router;
