@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const gravatar = require("gravatar");
 const { Gender } = require("../config/constants");
 const bcrypt = require("bcryptjs");
 const SALT_FACTOR = 6;
@@ -34,6 +35,13 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatar: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "250" }, true);
+      },
+    },
+    idUserCloud: { type: String, default: null },
   },
   {
     versionKey: false,
