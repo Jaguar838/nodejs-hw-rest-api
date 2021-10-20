@@ -43,32 +43,24 @@ const registration = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await Users.findByEmail(email);
-  if (user) {
-    const isValidPassword = await user.isValidPassword(password);
-    if (isValidPassword) {
-      const id = user._id;
-      const payload = { id };
-      const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-      await Users.updateToken(id, token);
-      return res.status(HttpCode.OK).json({
-        status: "success",
-        code: HttpCode.OK,
-        date: {
-          token,
-          user: {
-            email: user.email,
-            subscription: user.subscription,
-            id: user.id,
-            gender: user.gender,
-          },
-        },
-      });
-    }
+  const isValidPassword = await user?.isValidPassword(password);
+  if (!user || !isValidPassword) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: "error",
+      code: HttpCode.UNAUTHORIZED,
+      message: "Invalid credentials",
+    });
   }
-  return res.status(HttpCode.UNAUTHORIZED).json({
-    status: "error",
-    code: HttpCode.UNAUTHORIZED,
-    message: "Invalid credentials",
+  const id = user._id;
+  const payload = { id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  await Users.updateToken(id, token);
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    data: {
+      token,
+    },
   });
 };
 

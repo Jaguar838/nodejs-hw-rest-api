@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-let uri
-// test mode: add test-db in mongoDB 
-if (process.env.NODE_ENV == 'test') {
-  uri = process.env.URI_DB_TEST
+let uri;
+// test mode: add test-db in mongoDB
+if (process.env.NODE_ENV == "test") {
+  uri = process.env.URI_DB_TEST;
 } else {
-  uri = process.env.URI_DB
+  uri = process.env.URI_DB;
 }
 
 const db = mongoose.connect(uri, {
@@ -15,15 +15,15 @@ const db = mongoose.connect(uri, {
   useUnifiedTopology: true,
 });
 
-if (process.env.NODE_ENV == 'test') {
-  mongoose.connection.on('connected', () => {
-    console.log('Mongoose connection to DB')
-  })
+if (process.env.NODE_ENV == "test") {
+  mongoose.connection.on("connected", () => {
+    console.log("Mongoose connection to DB");
+  });
 
-mongoose.connection.on("error", (err) => {
-  console.log(`Mongoose connection error ${err.message}`);
-});
-
+  mongoose.connection.on("error", (err) => {
+    console.log(`Mongoose connection error ${err.message}`);
+  });
+}
 //  disconnected
 
 process.on("SIGINT", async () => {
