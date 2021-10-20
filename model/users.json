@@ -1,1 +1,51 @@
-[{"id":"eacfb401-0fd3-4d61-8389-631d1089e2b3","isFavorite":false,"name":"Allen Raymond","email":"nulla.ante@vestibul.co.uk","phone":"(992) 914-3792"},{"id":"871697e1-f274-4627-bf29-ede43dd8060c","isFavorite":true,"name":"Chaim Lewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":"4ac8eee8-462f-4a58-9077-c6d9b8571a14","isFavorite":true,"name":"ChaimLewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":"8c9439f4-c113-445e-bd24-2d4d406b87fd","isFavorite":true,"name":"Chaim Lewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":"eb5a81c7-cdba-4316-9e8d-7684bafbfbb4","isFavorite":true,"name":"ChaimLewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":"ceb79786-2747-46ee-9876-cd766d6296b1","isFavorite":true,"name":"ChaimLewis        ","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":"dfe7b483-967b-4b2b-b9d3-31b674bbf1bc","isFavorite":true,"name":"Chaim    Lewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"}]
+[
+  {
+    "id": "eacfb401-0fd3-4d61-8389-631d1089e2b3",
+    "isFavorite": false,
+    "name": "Allen Raymond",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(992) 914-3792"
+  },
+  {
+    "id": "871697e1-f274-4627-bf29-ede43dd8060c",
+    "isFavorite": true,
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "4ac8eee8-462f-4a58-9077-c6d9b8571a14",
+    "isFavorite": true,
+    "name": "ChaimLewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "8c9439f4-c113-445e-bd24-2d4d406b87fd",
+    "isFavorite": true,
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "eb5a81c7-cdba-4316-9e8d-7684bafbfbb4",
+    "isFavorite": true,
+    "name": "ChaimLewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "ceb79786-2747-46ee-9876-cd766d6296b1",
+    "isFavorite": true,
+    "name": "ChaimLewis        ",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "dfe7b483-967b-4b2b-b9d3-31b674bbf1bc",
+    "isFavorite": true,
+    "name": "Chaim    Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  }
+]
