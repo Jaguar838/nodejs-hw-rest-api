@@ -7,6 +7,7 @@ class FileAdapter {
   }
 
   async read() {
+    console.log("read:", this.store);
     const result = await fs.readFile(this.store, "utf8");
     const data = JSON.parse(result);
     return data;

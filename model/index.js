@@ -1,26 +1,26 @@
 const crypto = require("crypto");
 const DB = require("./db");
-const db = new DB("users.json");
+const db = new DB("contacts.json");
 
-const listUsers = async () => {
+const listContacts = async () => {
   return await db.read();
 };
 
-const addUser = async (body) => {
+const addContact = async (body) => {
   const users = await db.read();
-  const newUser = {
+  const newContact = {
     id: crypto.randomUUID(),
     // isFavorite: false,
     ...(body.isFavorite ? {} : { isFavorite: false }),
     // если вообще не знаешь прийдет ли это поле
     ...body,
   };
-  users.push(newUser);
+  users.push(newContact);
   await db.write(users);
-  return newUser;
+  return newContact;
 };
 
-const updateUser = async (id, body) => {
+const updateContact = async (id, body) => {
   const users = await db.read();
   const index = users.findIndex((user) => user.id === id);
   if (index !== -1) {
@@ -32,13 +32,13 @@ const updateUser = async (id, body) => {
   // undefined - нельзя делать, это не от нас зависит(запрос не пришел или чего-то не отправили).
 };
 
-const getUserId = async (id) => {
+const getContactId = async (id) => {
   const users = await db.read();
   const [user] = users.filter((user) => user.id === id);
   return user;
 };
 
-const removeUser = async (id) => {
+const removeContact = async (id) => {
   const users = await db.read();
   const index = users.findIndex((user) => user.id === id);
   if (index !== -1) {
@@ -50,9 +50,9 @@ const removeUser = async (id) => {
 };
 
 module.exports = {
-  listUsers,
-  addUser,
-  updateUser,
-  getUserId,
-  removeUser,
+  listContacts,
+  addContact,
+  updateContact,
+  getContactId,
+  removeContact,
 };
