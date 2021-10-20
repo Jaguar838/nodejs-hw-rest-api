@@ -9,3 +9,4 @@ users-avatars
 yarn.lock
 *.xml
 coverage/
+test/face.test.js
