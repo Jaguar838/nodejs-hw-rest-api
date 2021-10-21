@@ -1,15 +1,14 @@
 const jwt = require("jsonwebtoken");
-
+const { HttpCode } = require("../config/constants");
 const fs = require("fs/promises");
 // const path = require('path')
 // const mkdirp = require('mkdirp')
 // const UploadService = require('../services/file-upload')
 const UploadService = require("../services/cloud-upload");
-
 const Users = require("../repository/users");
-const { HttpCode } = require("../config/constants");
 const { CustomError } = require("../helpers/customError");
 require("dotenv").config();
+
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const registration = async (req, res, next) => {
@@ -24,7 +23,7 @@ const registration = async (req, res, next) => {
   }
   try {
     const newUser = await Users.create({ name, email, password, gender });
-    return res.status(HttpCode.CREATED).json({
+    return res.status(201).json({
       status: "success",
       code: HttpCode.CREATED,
       data: {
@@ -55,9 +54,9 @@ const login = async (req, res, next) => {
   const payload = { id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
   await Users.updateToken(id, token);
-  return res.status(HttpCode.OK).json({
+  return res.status(200).json({
     status: "success",
-    code: HttpCode.OK,
+    code: 200,
     data: {
       token,
     },
@@ -74,9 +73,9 @@ const current = async (req, res, next) => {
   const userId = req.user._id;
   const user = await Users.findById(userId);
   if (user) {
-    return res.status(HttpCode.OK).json({
+    return res.status(200).json({
       status: "success",
-      code: HttpCode.OK,
+      code: 200,
       message: "Current user data",
       data: { user },
     });
@@ -87,9 +86,9 @@ const current = async (req, res, next) => {
 const update = async (req, res, next) => {
   const userId = req.user._id;
   const user = await Users.updateSubscription(userId, req.body);
-  return res.status(HttpCode.OK).json({
+  return res.status(200).json({
     status: "success",
-    code: HttpCode.OK,
+    code: 200,
     data: {
       email: user.email,
       subscription: user.subscription,
@@ -108,9 +107,9 @@ const update = async (req, res, next) => {
 //   const avatarUrl = await uploadService.save(file, id)
 //   await Users.updateAvatar(id, avatarUrl)
 
-//   return res.status(HttpCode.OK).json({
+//   return res.status(200).json({
 //     status: 'success',
-//     code: HttpCode.OK,
+//     code: 200,
 //     date: {
 //       avatar: avatarUrl,
 //     },
@@ -135,9 +134,9 @@ const uploadAvatar = async (req, res, next) => {
   } catch (error) {
     console.log(error.message);
   }
-  return res.status(HttpCode.OK).json({
+  return res.status(200).json({
     status: "success",
-    code: HttpCode.OK,
+    code: 200,
     date: {
       avatar: avatarUrl,
     },

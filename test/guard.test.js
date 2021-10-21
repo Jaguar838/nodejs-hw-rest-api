@@ -14,5 +14,32 @@ describe("Unit test guard helper", () => {
     };
     next = jest.fn();
   });
-  it("User exist", async () => {});
+
+  it("User exist", async () => {
+    passport.authenticate = jest.fn(
+      (strategy, option, callback) => (req, res, next) => callback(null, user)
+    );
+    await guard(req, res, next);
+    expect(req.get).toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
+  });
+  it("User exist but have wrong token", async () => {
+    passport.authenticate = jest.fn(
+      (strategy, option, callback) => (req, res, next) =>
+        callback(null, { token: "123456" })
+    );
+    guard(req, res, next);
+    expect(req.get).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(HttpCode.UNAUTHORIZED);
+    expect(res.json).toHaveBeenCalled();
+  });
+  it("User  not exist", async () => {
+    passport.authenticate = jest.fn(
+      (strategy, option, callback) => (req, res, next) => callback(null, false)
+    );
+    guard(req, res, next);
+    expect(req.get).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(HttpCode.UNAUTHORIZED);
+    expect(res.json).toHaveBeenCalled();
+  });
 });

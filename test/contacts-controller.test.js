@@ -17,21 +17,22 @@ describe("Unit test controller updateContact", () => {
   });
 
   it("Contact exist", async () => {
-    const cat = {
+    const contact = {
       id: 3,
       name: "Kennedy LaneBy",
       email: "mattis_Cras@nonenimMauris.net",
       phone: "(542) 451-7038-5555",
     };
     Contacts.updateContact = jest.fn(() => {
-      return cat;
+      return contact;
     });
     const result = await updateContact(req, res, next);
     expect(result).toBeDefined();
     expect(result).toHaveProperty("status");
     expect(result).toHaveProperty("code");
     expect(result).toHaveProperty("data");
-    expect(result.data.cat).toEqual(cat);
+    expect(result.data.contact).toEqual(contact);
+    console.log(result);
   });
 
   it("Contact not exist v.1.0", async () => {
@@ -42,6 +43,7 @@ describe("Unit test controller updateContact", () => {
 
   it("Contact not exist v.1.1", () => {
     return updateContact(req, res, next).catch((e) => {
+      console.log(e);
       expect(e.status).toEqual(404);
       expect(e.message).toEqual("Not Found");
     });

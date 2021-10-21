@@ -4,7 +4,7 @@ const Gender = {
   NONE: "none",
 };
 
-const { HttpCode } = {
+const  HttpCode  = {
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,
