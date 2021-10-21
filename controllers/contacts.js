@@ -1,4 +1,4 @@
-const HttpCode = require("../config/constants");
+const {HttpCode} = require("../config/constants");
 const Contacts = require("../repository/contacts");
 const { CustomError } = require("../helpers/customError");
 
