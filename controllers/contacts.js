@@ -1,6 +1,6 @@
 const Contacts = require("../repository/contacts");
 
-// Получаем список юзеров из db
+// Получаем список контактов из db
 // router.get("/",
 const getContacts = async (req, res, next) => {
   try {
@@ -12,7 +12,7 @@ const getContacts = async (req, res, next) => {
   }
 };
 
-// Добавляем одного юзера в db
+// Добавляем контакт в db
 // router.post("/",
 const addContact = async (req, res, next) => {
   try {
@@ -24,7 +24,7 @@ const addContact = async (req, res, next) => {
   }
 };
 
-// Обновляем поля юзера
+// Обновляем поля контакта по id
 // router.put("/:id",
 const updateContact = async (req, res, next) => {
   try {
@@ -39,27 +39,27 @@ const updateContact = async (req, res, next) => {
       .status(404)
       .json({ status: "error", code: 404, message: "Not Found" });
   } catch (error) {
-    next(error);
+    next(error);контакта
   }
 };
 
-// Обновляем статус пользователя
-// router.patch("/:id/favorite/", async (req, res, next) => {
-//   try {
-//     console.log(req.method);
-//     const user = await Contacts.updateContact(req.params.id, req.body);
-//     if (user) {
-//       return res
-//         .status(200)
-//         .json({ status: "succes", code: 200, data: { user } });
-//     }
-//     return res
-//       .status(404)
-//       .json({ status: "error", code: 404, message: "Not Found" });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+Обновляем статус контакта
+router.patch("/:id/favorite/", async (req, res, next) => {
+  try {
+    console.log(req.method);
+    const user = await Contacts.updateContact(req.params.id, req.body);
+    if (user) {
+      return res
+        .status(200)
+        .json({ status: "succes", code: 200, data: { user } });
+    }
+    return res
+      .status(404)
+      .json({ status: "error", code: 404, message: "Not Found" });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // router.get("/:id",
 const getContact = async (req, res, next) => {
