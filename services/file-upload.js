@@ -4,8 +4,6 @@ const path = require("path");
 
 class UploadFileAvatar {
   constructor(destination) {
-    // file deepcode ignore JavascriptDuplicateImport: <please specify a reason of ignoring this>
-    // deepcode ignore JavascriptDuplicateImport: <please specify a reason of ignoring this>
     this.destination = destination;
   }
 
