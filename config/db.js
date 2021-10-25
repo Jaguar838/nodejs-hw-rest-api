@@ -15,13 +15,14 @@ mongoose.connection.on("connected", () => {
 
 mongoose.connection.on("error", (err) => {
   console.log(`Mongoose connection error ${err.message}`);
+  process.exit(1);
 });
 
 //  disconnected
 
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
-  console.log("Connection for DB closed");
+  console.log("Connection to DB closed");
   process.exit();
 });
 
