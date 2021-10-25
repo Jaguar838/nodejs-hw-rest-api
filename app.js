@@ -1,11 +1,11 @@
 const contactsRouter = require("./routes/contacts/contacts");
-const usersRouter = require("./routes/users/user");
+const usersRouter = require("./routes/users/users");
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
 const boolParser = require("express-query-boolean");
-const HttpCode = require("./config/constants");
+const { HttpCode } = require("./config/constants");
 
 const app = express();
 app.use(helmet());
@@ -19,8 +19,8 @@ app.use(cors());
 app.use(express.json({ limit: 10000 }));
 app.use(boolParser());
 
-app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
-const {HttpCode} = require("../config/constants");
+const { HttpCode } = require("../config/constants");
 const { CustomError } = require("../helpers/customError");
 require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -12,7 +12,7 @@ const registration = async (req, res, next) => {
     return res.status(HttpCode.CONFLICT).json({
       status: "error",
       code: HttpCode.CONFLICT,
-      message: "Email is already use",
+      message: "Email is already exist",
     });
   }
   try {
@@ -35,32 +35,24 @@ const registration = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await Users.findByEmail(email);
-  if (user) {
-    const isValidPassword = await user.isValidPassword(password);
-    if (isValidPassword) {
-      const id = user._id;
-      const payload = { id };
-      const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-      await Users.updateToken(id, token);
-      return res.status(HttpCode.OK).json({
-        status: "success",
-        code: HttpCode.OK,
-        date: {
-          token,
-          user: {
-            email: user.email,
-            subscription: user.subscription,
-            id: user.id,
-            gender: user.gender,
-          },
-        },
-      });
-    }
+  const isValidPassword = await user?.isValidPassword(password);
+  if (!user || !isValidPassword) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: "error",
+      code: HttpCode.UNAUTHORIZED,
+      message: "Invalid credentials",
+    });
   }
-  return res.status(HttpCode.UNAUTHORIZED).json({
-    status: "error",
-    code: HttpCode.UNAUTHORIZED,
-    message: "Invalid credentials",
+  const id = user._id;
+  const payload = { id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  await Users.updateToken(id, token);
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    date: {
+      token,
+    },
   });
 };
 

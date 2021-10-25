@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { Gender } = require("../config/constants");
 const bcrypt = require("bcryptjs");
-const SALT_FACTOR = 6;
+const SALT_FACTOR = 3;
 
 const userSchema = new Schema(
   {
