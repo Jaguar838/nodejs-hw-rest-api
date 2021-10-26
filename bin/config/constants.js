@@ -1,6 +1,6 @@
 const Gender = {
-  MALE: male,
-  FEMALE: female,
+  MALE: "male",
+  FEMALE: "female",
   NONE: "none",
 };
 const HttpCode = {
@@ -10,3 +10,4 @@ const HttpCode = {
   NO_CONTENT: 204,
   BAD_REQUEST: 400,
 };
+module.exports = { Gender, HttpCode };
