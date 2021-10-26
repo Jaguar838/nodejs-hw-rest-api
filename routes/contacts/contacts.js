@@ -17,14 +17,14 @@ const {
 
 router.get("/", getContacts);
 
-router.get("/:contactId", validateContactId, getContact);
+router.get("/:id", validateContactId, getContact);
 
 router.post("/", validateContact, addContact);
 
-router.delete("/:contactId", validateContactId, deleteContact);
-router.put("/:contactId", validateContactId, validateContact, updateContact);
+router.delete("/:id", validateContactId, deleteContact);
+router.put("/:id", validateContactId, validateContact, updateContact);
 router.patch(
-  "/:contactId",
+  "/:id/favorite/",
   validateContactId,
   validateContactPatch,
   updateContact
