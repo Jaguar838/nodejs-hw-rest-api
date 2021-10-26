@@ -17,19 +17,19 @@ const {
 
 router.get("/", guard, getContacts);
 
-router.get("/:contactId", guard, validateContactId, getContact);
+router.get("/:id", guard, validateContactId, getContact);
 
 router.post("/", guard, validateContact, addContact);
 
-router.delete("/:contactId", guard, validateContactId, deleteContact);
+router.delete("/:id", guard, validateContactId, deleteContact);
 router.put(
-  "/:contactId",
+  "/:id",
   guard,
   [(validateContactId, validateContact)],
   updateContact
 );
 router.patch(
-  "/:contactId",
+  "/:id/favorite/",
   guard,
   [(validateContactId, validateContactPatch)],
   updateContact
