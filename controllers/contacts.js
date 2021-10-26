@@ -17,8 +17,8 @@ const getContacts = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Contacts.addContact(req.body);
-    res.status(201).json({ status: "succes", code: 201, data: { user } });
+    const contact = await Contacts.addContact(req.body);
+    res.status(201).json({ status: "succes", code: 201, data: { contact } });
   } catch (error) {
     next(error);
   }
@@ -29,11 +29,11 @@ const addContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Contacts.updateContact(req.params.id, req.body);
-    if (user) {
+    const contact = await Contacts.updateContact(req.params.id, req.body);
+    if (contact) {
       return res
         .status(200)
-        .json({ status: "succes", code: 200, data: { user } });
+        .json({ status: "succes", code: 200, data: { contact } });
     }
     return res
       .status(404)
@@ -47,11 +47,11 @@ const updateContact = async (req, res, next) => {
 // router.patch("/:id/favorite/", async (req, res, next) => {
 //   try {
 //     console.log(req.method);
-//     const user = await Contacts.updateContact(req.params.id, req.body);
-//     if (user) {
+//     const contact = await Contacts.updateContact(req.params.id, req.body);
+//     if (contact) {
 //       return res
 //         .status(200)
-//         .json({ status: "succes", code: 200, data: { user } });
+//         .json({ status: "succes", code: 200, data: { contact } });
 //     }
 //     return res
 //       .status(404)
@@ -65,11 +65,11 @@ const updateContact = async (req, res, next) => {
 const getContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Contacts.getContactId(req.params.id, req.body);
-    if (user) {
+    const contact = await Contacts.getContactId(req.params.id, req.body);
+    if (contact) {
       return res
         .status(200)
-        .json({ status: "succes", code: 200, data: { user } });
+        .json({ status: "succes", code: 200, data: { contact } });
     }
     return res
       .status(404)
@@ -83,7 +83,7 @@ const getContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const contact = await Contacts.deleteContact(req.params.id, req.body);
+    const contact = await Contacts.deleteContact(req.params.id);
     if (contact) {
       return res
         .status(200)
