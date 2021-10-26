@@ -11,7 +11,7 @@ const getContactId = async (id) => {
 };
 
 const updateContact = async (id, body) => {
-  const { value: result } = await Contact.findOneAndUpdate(
+  const result = await Contact.findOneAndUpdate(
     { _id: id },
     { ...body },
     { new: true }

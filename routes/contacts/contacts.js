@@ -16,18 +16,17 @@ const {
 
 router.get("/", getContacts);
 
-router.get("/:contactId", validateContactId, getContact);
+router.get("/:id", validateContactId, getContact);
 
 router.post("/", validateContact, addContact);
 
-router.delete("/:contactId", validateContactId, deleteContact);
+router.delete("/:id", validateContactId, deleteContact);
 
-router.put("/:contactId", validateContactId, validateContact, updateContact);
+router.put("/:id", [validateContactId, validateContact], updateContact);
 
 router.patch(
-  "/:contactId/favorite/",
-  validateContactId,
-  validateContactPatch,
+  "/:id/favorite/",
+  [validateContactId, validateContactPatch],
   updateContact
 );
 

@@ -5,8 +5,28 @@ const Contacts = require("../repository/contacts");
 const getContacts = async (req, res, next) => {
   try {
     console.log(req.method);
-    const users = await Contacts.listContacts();
-    res.status(200).json({ status: "succes", code: 200, data: { users } });
+    const contacts = await Contacts.listContacts();
+    res.status(200).json({ status: "succes", code: 200, data: { contacts } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Получаем один контакт из db по id
+// router.get("/:id",
+const getContact = async (req, res, next) => {
+  try {
+    // console.log(req.method);
+    const contact = await Contacts.getContactId(req.params.id, req.body);
+    // console.log(contact, contact.id);
+    if (contact) {
+      return res
+        .status(200)
+        .json({ status: "succes", code: 200, data: { contact } });
+    }
+    return res
+      .status(404)
+      .json({ status: "error", code: 404, message: "Not Found" });
   } catch (error) {
     next(error);
   }
@@ -18,6 +38,11 @@ const addContact = async (req, res, next) => {
   try {
     console.log(req.method);
     const contact = await Contacts.addContact(req.body);
+    if (!contact.name || !contact.email || !contact.phone) {
+      return res
+        .status(400)
+        .json({ status: "error", code: 400, data: { contact } });
+    }
     res.status(201).json({ status: "succes", code: 201, data: { contact } });
   } catch (error) {
     next(error);
@@ -30,6 +55,7 @@ const updateContact = async (req, res, next) => {
   try {
     console.log(req.method);
     const contact = await Contacts.updateContact(req.params.id, req.body);
+    console.log(contact);
     if (contact) {
       return res
         .status(200)
@@ -60,24 +86,6 @@ const updateContact = async (req, res, next) => {
 //     next(error);
 //   }
 // });
-
-// router.get("/:id",
-const getContact = async (req, res, next) => {
-  try {
-    console.log(req.method);
-    const contact = await Contacts.getContactId(req.params.id, req.body);
-    if (contact) {
-      return res
-        .status(200)
-        .json({ status: "succes", code: 200, data: { contact } });
-    }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
-  } catch (error) {
-    next(error);
-  }
-};
 
 // router.delete("/:id",
 const deleteContact = async (req, res, next) => {
