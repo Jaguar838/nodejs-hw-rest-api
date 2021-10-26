@@ -24,7 +24,7 @@ const addContact = async (body) => {
   return result;
 };
 
-const removeContact = async (id) => {
+const deleteContact = async (id) => {
   const result = await Contact.findByIdAndRemove({ _id: id });
   return result;
 };
@@ -34,5 +34,5 @@ module.exports = {
   addContact,
   updateContact,
   getContactId,
-  removeContact,
+  deleteContact,
 };

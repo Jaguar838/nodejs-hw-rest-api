@@ -83,7 +83,7 @@ const getContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const user = await Contacts.removeContact(req.params.id, req.body);
+    const user = await Contacts.deleteContact(req.params.id, req.body);
     if (user) {
       return res
         .status(200)
