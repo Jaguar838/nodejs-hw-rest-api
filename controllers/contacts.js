@@ -1,4 +1,4 @@
-const {HttpCode} = require("../config/constants");
+const { HttpCode } = require("../config/constants");
 const Contacts = require("../repository/contacts");
 const { CustomError } = require("../helpers/customError");
 
@@ -7,7 +7,7 @@ const getContacts = async (req, res) => {
   const userId = req.user._id;
   console.log(userId, req.method);
   const contacts = await Contacts.listContacts(userId, req.query);
-  res.json({ status: "succes", code: HttpCode.OK, data: { ...contacts } });
+  res.json({ status: "succes", code: HttpCode.OK, data: { contacts } });
 };
 
 const getContact = async (req, res, next) => {

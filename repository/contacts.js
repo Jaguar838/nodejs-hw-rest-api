@@ -1,21 +1,12 @@
 const Contact = require("../model/contact");
 
-const listContacts = async () => {
-  const results = await Contact.find({});
+const listContacts = async (userId) => {
+  const results = await Contact.find({ owner: userId });
   return results;
 };
 
-const updateContact = async (id, body) => {
-  const result = await Contact.findByIdAndUpdate(
-    { _id: id },
-    { ...body },
-    { new: true }
-  );
-  return result;
-};
-
-const getContactId = async (id) => {
-  const result = await Contact.findById(id);
+const getContactId = async (id, userId) => {
+  const result = await Contact.findOne({ _id: id, owner: userId });
   return result;
 };
 
@@ -24,8 +15,17 @@ const addContact = async (body) => {
   return result;
 };
 
-const deleteContact = async (id) => {
-  const result = await Contact.findByIdAndRemove({ _id: id });
+const updateContact = async (id, body, userId) => {
+  const result = await Contact.findOneAndUpdate(
+    { _id: id, owner: userId },
+    { ...body },
+    { new: true }
+  );
+  return result;
+};
+
+const deleteContact = async (id, userId) => {
+  const result = await Contact.findByIdAndRemove({ _id: id, owner: userId });
   return result;
 };
 
