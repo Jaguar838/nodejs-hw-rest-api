@@ -16,7 +16,7 @@ app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 
-// parse application/json
+// parse application/json limit 10Kb
 app.use(express.json({ limit: 10000 }));
 app.use(boolParser());
 
