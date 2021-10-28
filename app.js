@@ -19,6 +19,12 @@ app.use(cors());
 // parse application/json limit 10Kb
 app.use(express.json({ limit: 10000 }));
 app.use(boolParser());
+// Headers Accept-Language
+app.use((req, _res, next) => {
+  // console.log(req.acceptsLanguages());
+  app.set("lang", req.acceptsLanguages(["en", "ru"]));
+  next();
+});
 
 app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
