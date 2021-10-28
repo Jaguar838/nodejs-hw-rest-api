@@ -10,7 +10,7 @@ const listContacts = async (userId, query) => {
   const {
     sortBy,
     sortByDesc,
-    // filter,
+    filter,
     isFavorite = null,
     limit = 5,
     page = 1,
@@ -30,7 +30,7 @@ const listContacts = async (userId, query) => {
       ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
       ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
     },
-    // select: filter ? filter.split("|").join(" ") : "",
+    select: filter ? filter.split("|").join(" ") : "", // вместо | подставить пробел
     populate: {
       path: "owner",
       select: "name email gender createdAt updatedAt",
