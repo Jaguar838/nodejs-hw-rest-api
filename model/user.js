@@ -30,6 +30,11 @@ const userSchema = new Schema(
       },
       default: Gender.NONE,
     },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
     token: {
       type: String,
       default: null,

@@ -17,8 +17,13 @@ const HttpCode = {
   TOO_MANY_REQUESTS: 429,
   INTERNAL_SERVER_ERROR: 500,
 };
-
+const Subscription = {
+  STARTER: "starter",
+  PRO: "pro",
+  BUSINESS: "business",
+};
 module.exports = {
+  Subscription,
   Gender,
   HttpCode,
 };
