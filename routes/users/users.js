@@ -17,10 +17,11 @@ const {
   validateSubscriptionUser,
 } = require("./validation");
 
+
 router.post("/registration", validateRegistration, registration);
 // Установка лимита на логин с одного IP(3р в течение часа)
 router.post("/login", loginLimit, validateLogin, login);
 router.post("/logout", guard, logout);
 router.get("/current", guard, current);
-router.patch("/", guard, validateSubscriptionUser, update);
+router.patch("/:id/subscription/", guard, validateSubscriptionUser, update);
 module.exports = router;

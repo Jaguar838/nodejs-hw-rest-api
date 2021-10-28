@@ -32,7 +32,7 @@ const registration = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await Users.findByEmail(email);
   const isValidPassword = await user?.isValidPassword(password);
@@ -56,37 +56,45 @@ const login = async (req, res, next) => {
   });
 };
 
-const logout = async (req, res, next) => {
+const logout = async (req, res) => {
   const id = req.user._id;
   await Users.updateToken(id, null);
   return res.status(HttpCode.NO_CONTENT).json({ test: "test" });
 };
 
-const current = async (req, res, next) => {
+const current = async (req, res) => {
   const userId = req.user._id;
   const user = await Users.findById(userId);
   if (user) {
     return res.status(HttpCode.OK).json({
       status: "success",
       code: HttpCode.OK,
-      message: "Current user data",
-      data: { user },
+      message: "Current user",
+      data: {
+        id: user.id,
+        email: user.email,
+        subscription: user.subscription
+      }
     });
   }
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
 
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   const userId = req.user._id;
-  const user = await Users.updateSubscription(userId, req.body);
-  return res.status(HttpCode.OK).json({
-    status: "success",
-    code: HttpCode.OK,
-    data: {
-      email: user.email,
-      subscription: user.subscription,
-    },
-  });
+  const user = await Users.updateSubscription(req.body, userId);
+    if (user) {
+    return res.status(HttpCode.OK).json({
+      status: "success",
+      code: HttpCode.OK,
+      data: {
+        id: user.id,
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  };
+  throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
 
 module.exports = {

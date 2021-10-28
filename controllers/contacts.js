@@ -26,7 +26,7 @@ const getContact = async (req, res) => {
 };
 
 // Добавляем контакт
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   const userId = req.user._id;
   console.log(userId, req.method);
   const contact = await Contacts.addContact({ ...req.body, owner: userId });
@@ -36,7 +36,7 @@ const addContact = async (req, res, next) => {
 };
 
 // Обновляем поля контакта
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const userId = req.user._id;
   console.log(userId, req.method);
   const contact = await Contacts.updateContact(req.params.id, req.body, userId);
@@ -48,7 +48,7 @@ const updateContact = async (req, res, next) => {
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
 // Удаляем контакт
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const userId = req.user._id;
   console.log(userId, req.method);
   const contact = await Contacts.deleteContact(req.params.id, userId);
