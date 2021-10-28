@@ -1,6 +1,6 @@
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
-const {HttpCode} = require("../../config/constants");
+const { HttpCode } = require("../../config/constants");
 
 const schemaRegistration = Joi.object({
   name: Joi.string().min(1).max(30).optional(),
@@ -40,6 +40,6 @@ module.exports.validateLogin = async (req, res, next) => {
   return await validate(schemaLogin, req.body, res, next);
 };
 
-module.exports.validateSubscriptionUpdate = async (req, res, next) => {
+module.exports.validateSubscriptionUser = async (req, res, next) => {
   return await validate(schemaSubscription, req.params, res, next);
 };

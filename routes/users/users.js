@@ -14,7 +14,7 @@ const {
 const {
   validateRegistration,
   validateLogin,
-  validateSubscriptionUpdate,
+  validateSubscriptionUser,
 } = require("./validation");
 
 router.post("/registration", validateRegistration, registration);
@@ -22,5 +22,5 @@ router.post("/registration", validateRegistration, registration);
 router.post("/login", loginLimit, validateLogin, login);
 router.post("/logout", guard, logout);
 router.get("/current", guard, current);
-router.patch("/", guard, validateSubscriptionUpdate, update);
+router.patch("/", guard, validateSubscriptionUser, update);
 module.exports = router;
