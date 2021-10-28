@@ -10,10 +10,9 @@ const boolParser = require("express-query-boolean");
 const { HttpCode } = require("./config/constants");
 
 const app = express();
-app.use(helmet());
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
+app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 
