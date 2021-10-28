@@ -9,7 +9,7 @@ const getContacts = async (req, res) => {
   const contacts = await Contacts.listContacts(userId, req.query);
   res.json({ status: "succes", code: HttpCode.OK, data: { contacts } });
 };
-
+// Получаем контакт по id
 const getContact = async (req, res, next) => {
   const userId = req.user._id;
   console.log(userId, req.method);

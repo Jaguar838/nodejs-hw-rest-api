@@ -1,6 +1,6 @@
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
-const {HttpCode} = require("../../config/constants");
+const { HttpCode } = require("../../config/constants");
 
 const patterns = {
   name: /[a-zA-Zа-яА-Я]*$/,
@@ -19,9 +19,9 @@ const schemaContactPatch = Joi.object({
   isFavorite: Joi.boolean().required(),
 });
 
-const schemaContactId = {
+const schemaContactId = Joi.object({
   id: Joi.objectId().required(),
-};
+});
 
 const validate = async (schema, obj, res, next) => {
   try {

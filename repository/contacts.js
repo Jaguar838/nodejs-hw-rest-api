@@ -1,12 +1,20 @@
 const Contact = require("../model/contact");
 
 const listContacts = async (userId) => {
-  const results = await Contact.find({ owner: userId });
+  // Связывание полей с users колекцией
+  const results = await Contact.find({ owner: userId }).populate({
+    path: "owner",
+    select: "name email gender createdAt updatedAt -_id",
+  });
   return results;
 };
 
 const getContactId = async (id, userId) => {
-  const result = await Contact.findOne({ _id: id, owner: userId });
+  const result = await Contact.findOne({ _id: id, owner: userId }).populate({
+    path: "owner",
+    // выборка/исключение полей owner(чтобы полностью убрать id нужно откл. виртуальные поля в модели)
+    select: "name email gender createdAt updatedAt -_id",
+  });
   return result;
 };
 
