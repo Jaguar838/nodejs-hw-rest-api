@@ -1,12 +1,44 @@
 const Contact = require("../model/contact");
 
-const listContacts = async (userId) => {
+const listContacts = async (userId, query) => {
   // Связывание полей с users колекцией
-  const results = await Contact.find({ owner: userId }).populate({
-    path: "owner",
-    select: "name email gender createdAt updatedAt -_id",
+  // const results = await Contact.find({ owner: userId }).populate({
+  //   path: "owner",
+  //   select: "name email gender createdAt updatedAt -_id",
+  // });
+  // Pagination
+  const {
+    sortBy,
+    sortByDesc,
+    // filter,
+    isFavorite = null,
+    limit = 5,
+    page = 1,
+    // Смещение от начала массива
+    // offset = 0,
+  } = query;
+  const searchOptions = { owner: userId };
+  if (isFavorite !== null) {
+    // стал boolean, до установки пакета был строкой
+    // console.log(typeof isFavorite);
+    searchOptions.isFavorite = isFavorite;
+  }
+  const results = await Contact.paginate(searchOptions, {
+    limit,
+    page,
+    sort: {
+      ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+      ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+    },
+    // select: filter ? filter.split("|").join(" ") : "",
+    populate: {
+      path: "owner",
+      select: "name email gender createdAt updatedAt",
+    },
   });
-  return results;
+  const { docs: contacts } = results;
+  delete results.docs;
+  return { ...results, contacts };
 };
 
 const getContactId = async (id, userId) => {

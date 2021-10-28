@@ -3,21 +3,28 @@ const Contacts = require("../repository/contacts");
 const { CustomError } = require("../helpers/customError");
 
 // Получаем список контактов
-const getContacts = async (req, res) => {
-  const userId = req.user._id;
-  console.log(userId, req.method);
-  const contacts = await Contacts.listContacts(userId, req.query);
-  res.json({ status: "succes", code: HttpCode.OK, data: { contacts } });
+const getContacts = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    console.log(userId, req.method);
+    const data = await Contacts.listContacts(userId, req.query);
+    res.json({ status: "succes", code: HttpCode.OK, data: { ...data } });
+  } catch (error) {
+    next(error);
+  }
 };
 // Получаем контакт по id
-const getContact = async (req, res, next) => {
+const getContact = async (req, res) => {
   const userId = req.user._id;
   console.log(userId, req.method);
   const contact = await Contacts.getContactId(req.params.id, userId);
   if (contact) {
-    return res
-      .status(HttpCode.OK)
-      .json({ status: "succes", code: HttpCode.OK, data: { contact } });
+    return res.status(HttpCode.OK).json({
+      status: "succes",
+      code: HttpCode.OK,
+      data: { contact },
+      message: `Contact with id ${req.params.id} found!`,
+    });
   }
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };

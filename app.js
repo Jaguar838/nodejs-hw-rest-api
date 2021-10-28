@@ -4,6 +4,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+// Пакет для работы с query boolean - переводит String to Boolean
 const boolParser = require("express-query-boolean");
 const { HttpCode } = require("./config/constants");
 
