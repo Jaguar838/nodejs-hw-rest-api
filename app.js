@@ -8,12 +8,16 @@ const helmet = require("helmet");
 // Пакет для работы с query boolean - переводит String to Boolean
 const boolParser = require("express-query-boolean");
 const { HttpCode } = require("./config/constants");
+require("dotenv").config();
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
 
 const app = express();
+// app.use(express.static(AVATAR_OF_USERS));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(helmet());
-app.use(logger(formatsLogger));
+//remove logs in test mode 
+app.get('env') !== 'test' && app.use(logger(formatsLogger))
 app.use(cors());
 
 // parse application/json limit 10Kb
@@ -36,9 +40,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-    status: "fail",
-    code: HttpCode.INTERNAL_SERVER_ERROR,
+  const statusCode = err.status || HttpCode.INTERNAL_SERVER_ERROR;
+  res.status(statusCode).json({
+    status: statusCode === HttpCode.INTERNAL_SERVER_ERROR ? "fail" : "error",
+    code: statusCode,
     message: err.message,
   });
 });

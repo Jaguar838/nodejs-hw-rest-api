@@ -3,6 +3,9 @@ const app = require("../app");
 
 const result = require("dotenv").config();
 
+const UPLOAD_DIR = process.env.UPLOAD_DIR;
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+const mkdirp = require("mkdirp");
 if (result.error) {
   throw result.error;
 }
