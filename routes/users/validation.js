@@ -6,7 +6,7 @@ const schemaRegistration = Joi.object({
   name: Joi.string().min(1).max(30).optional(),
   email: Joi.string().email().required(),
   password: Joi.string().alphanum().min(8).required(),
-  gender: Joi.string().valid("male", "female").optional(),
+  gender: Joi.string().valid("male", "female", "none").optional(),
 });
 
 const schemaLogin = Joi.object({
@@ -15,7 +15,7 @@ const schemaLogin = Joi.object({
 });
 
 const schemaSubscription = Joi.object({
-  subscription: Joi.valid("starter", "pro", "business").required(),
+  subscription: Joi.string().valid("starter", "pro", "business").optional(),
 });
 
 const validate = async (schema, obj, res, next) => {
@@ -41,5 +41,5 @@ module.exports.validateLogin = async (req, res, next) => {
 };
 
 module.exports.validateSubscriptionUser = async (req, res, next) => {
-  return await validate(schemaSubscription, req.params, res, next);
+  return await validate(schemaSubscription, req.body, res, next);
 };

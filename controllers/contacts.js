@@ -9,6 +9,7 @@ const getContacts = async (req, res) => {
   const data = await Contacts.listContacts(userId, req.query);
   res.json({ status: "succes", code: HttpCode.OK, data: { ...data } });
 };
+
 // Получаем контакт по id
 const getContact = async (req, res) => {
   const userId = req.user._id;
@@ -47,6 +48,7 @@ const updateContact = async (req, res) => {
   }
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
+
 // Удаляем контакт
 const deleteContact = async (req, res) => {
   const userId = req.user._id;

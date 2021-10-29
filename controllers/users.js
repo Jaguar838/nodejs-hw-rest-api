@@ -82,20 +82,36 @@ const current = async (req, res) => {
 
 const update = async (req, res) => {
   const userId = req.user._id;
-  const user = await Users.updateSubscription(req.body, userId);
-    if (user) {
-    return res.status(HttpCode.OK).json({
+  const user = await Users.updateSubscription(userId, req.body);
+  if (user) {
+  return res.status(HttpCode.OK).json({
       status: "success",
       code: HttpCode.OK,
       data: {
-        id: user.id,
         email: user.email,
         subscription: user.subscription,
       },
     });
   };
-  throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
+throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
+
+// const update = async (req, res) => {
+//   const userId = req.user._id;
+//   const user = await Users.updateSubscription(req.body, userId);
+//     if (user) {
+//     return res.status(HttpCode.OK).json({
+//       status: "success",
+//       code: HttpCode.OK,
+//       data: {
+//         id: user.id,
+//         email: user.email,
+//         subscription: user.subscription,
+//       },
+//     });
+//   };
+//   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
+// };
 
 module.exports = {
   registration,
