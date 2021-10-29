@@ -1,8 +1,12 @@
 .dccache
 node_modules
-
+uploads
+users-avatars
 .env
 *.log
 *.zip
 
 yarn.lock
+*.xml
+coverage/
+test/face.test.js

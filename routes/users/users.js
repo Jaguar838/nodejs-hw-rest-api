@@ -3,12 +3,15 @@ const router = express.Router();
 const guard = require("../../helpers/guard");
 const loginLimit = require("../../helpers/rate-limit-login");
 const wrapError = require("../../helpers/errorHandler");
+const upload = require("../../helpers/uploads");
+
 const {
   registration,
   login,
   logout,
   current,
   update,
+  uploadAvatar
 } = require("../../controllers/users");
 
 const {
@@ -24,4 +27,7 @@ router.post("/registration", validateRegistration, registration);
 router.post("/login", loginLimit, validateLogin, login);
 router.post("/logout", guard, logout);
 router.get("/current", guard, wrapError(current));
+// Загрузка avatar
+router.post("/avatar", guard, upload.single("avatar"), uploadAvatar);
+
 module.exports = router;

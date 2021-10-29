@@ -12,7 +12,7 @@ require("dotenv").config();
 const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
 
 const app = express();
-// app.use(express.static(AVATAR_OF_USERS));
+app.use(express.static(AVATAR_OF_USERS));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(helmet());
