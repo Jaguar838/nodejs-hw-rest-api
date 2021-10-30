@@ -1,7 +1,7 @@
 .dccache
 node_modules
 uploads
-users-avatars
+public/users-avatars
 .env
 *.log
 *.zip
