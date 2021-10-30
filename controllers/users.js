@@ -121,6 +121,9 @@ const uploadAvatar = async (req, res, next) => {
       avatar: avatarUrl,
     },
   });
+  // const pic = req.file;
+  // console.log(pic);
+  // return res.status(HttpCode.OK).json({ pic });
 };
 
 // Cloud storage
@@ -138,7 +141,7 @@ const uploadAvatar = async (req, res, next) => {
 //   } catch (error) {
 //     console.log(error.message);
 //   }
-//   return res.status(200).json({
+//   return res.status(HttpCode.OK).json({
 //     status: 'success',
 //     code: 200,
 //     date: {

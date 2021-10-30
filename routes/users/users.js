@@ -1,33 +1,22 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const guard = require("../../helpers/guard");
-const loginLimit = require("../../helpers/rate-limit-login");
-const wrapError = require("../../helpers/errorHandler");
-const upload = require("../../helpers/uploads");
+const guard = require('../../helpers/guard');
+const loginLimit = require('../../helpers/rate-limit-login');
+const wrapError = require('../../helpers/errorHandler');
+const upload = require('../../helpers/uploads');
 
-const {
-  registration,
-  login,
-  logout,
-  current,
-  update,
-  uploadAvatar
-} = require("../../controllers/users");
+const { registration, login, logout, current, update, uploadAvatar } = require('../../controllers/users');
 
-const {
-  validateRegistration,
-  validateLogin,
-  validateSubscriptionUser,
-} = require("./validation");
+const { validateRegistration, validateLogin, validateSubscriptionUser } = require('./validation');
 
-router.patch("/",guard, validateSubscriptionUser, wrapError(update));
+router.patch('/', guard, validateSubscriptionUser, wrapError(update));
 
-router.post("/registration", validateRegistration, registration);
+router.post('/registration', validateRegistration, registration);
 // Установка лимита на логин с одного IP(3р в течение часа)
-router.post("/login", loginLimit, validateLogin, login);
-router.post("/logout", guard, logout);
-router.get("/current", guard, wrapError(current));
+router.post('/login', loginLimit, validateLogin, login);
+router.post('/logout', guard, logout);
+router.get('/current', guard, wrapError(current));
 // Загрузка avatar
-router.post("/avatar", guard, upload.single("avatar"), uploadAvatar);
+router.patch('/avatar', guard, upload.single('avatar'), uploadAvatar);
 
 module.exports = router;
