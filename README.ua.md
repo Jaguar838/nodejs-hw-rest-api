@@ -1,76 +1,150 @@
 **Читать на других языках: [Русский](README.md), [Українська](README.ua.md).**
 
-# Домашнє завдання 3
+# Домашнє завдання 6
 
-Створи гілку `03-mongodb` з гілки `master`.
+Створи гілку `hw06-email` з гілки` master`.
 
-Продовж створення REST API для роботи з колекцією контактів.
+Продовжуємо створення REST API для роботи з колекцією контактів. Додайте верифікацію email користувача після реєстрації за допомогою сервісу [SendGrid](https://sendgrid.com/).
+
+## Як процес верифікації повинен працювати
+
+1. Після реєстрації, користувач повинен отримати лист на вказану при реєстрації пошту з посиланням для верифікації свого email
+2. Пройшовши посиланням в отриманому листі, в перший раз, користувач повинен отримати [Відповідь зі статусом 200](#verification-success-response), що буде мати на увазі успішну верифікацію email
+3. Пройшовши по посиланню повторно користувач повинен отримати [Помилку зі статусом 404](#verification-user-not-found)
 
 ## Крок 1
 
-Створи аккаунт на [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). Після чого в акаунті створи новий проект і настрій **бесплатный кластер**. Під час налаштування кластера вибери провавйдера і регіон як на скріншоті нижче. Якщо вибрати занадто віддалений регіон, швидкість відповіді сервера буде довше.
+### Підготовка інтеграції з SendGrid API
 
-![atlas cluster setup](./assets/img/atlas-cluster.jpg)
+- Зареєструйся на [SendGrid](https://sendgrid.com/).
+- Створи email-відправника. Для це в адміністративній панелі SendGrid зайдіть в меню Marketing в підміню senders і в правому верхньому куті натисніть кнопку "Create New Sender". Заповніть поля в запропонованій формі. Збережіть. Повинен вийде наступний як на картинці результат, тільки з вашим email:
+
+![Sender](sender-not-verify.png)
+
+На вказаний email повинно прийти лист верифікації (перевірте спам якщо не бачите листи). Натисніть на посилання в ньому і завершите процес. Результат повинен зміниться на:
+
+![Sender](sender-verify.png)
+
+- Тепер необхідно створити API токен доступу. Вибираємо меню "Email API", і підміню "Integration Guide". Тут вибираємо "Web API"
+
+![Api-key](web-api.png)
+
+Далі необхідно вибрати технологію Node.js
+
+![Api-key](node.png)
+
+На третьому кроці даємо ім'я нашого токені. Наприклад systemcats, натискаємо кнопку згенерувати і отримуємо результат як на скріншоті нижче. Необхідно скопіювати цей токен (це важливо, тому що більше ви не зможете його подивитися). Після завершити процес створення токена
+
+![Api-key](api-key.png)
+
+- Отриманий API-токен треба додати в `.env` файл в нашому проекті
 
 ## Крок 2
 
-Установи графічний редактор
-[MongoDB Compass](https://www.mongodb.com/download-center/compass) для зручної
-роботи з базою даних для MongoDB. Настрій підключення своєї хмарної бази даних
-до Compass. У MongoDB Atlas не забудь створити користувача з правами
-адміністратора.
+### Створення ендпоінта для верифікації email
+
+- додати в модель `User` два поля `verificationToken` і `verify`. Значення поля `verify` рівне `false` означатиме, що його email ще не пройшов верифікацію
+
+```js
+{
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
+}
+```
+
+- створити ендпоінт GET [`/users/verify/:verificationToken`](# verification-request), де по параметру `verificationToken` ми будемо шукати користувача в моделі `User`
+- якщо користувач з таким токеном не знайдений, необхідно повернути [Помилку 'Not Found'](#verification-user-not-found)
+- якщо користувач знайдений - встановлюємо `verificationToken` в `null`, а поле `verify` ставимо рівним` true` в документі користувача і повертаємо [Успішний відповідь](#verification-success-response)
+
+### Verification request
+
+```shell
+GET /auth/verify/:verificationToken
+```
+
+### Verification user Not Found
+
+```shell
+Status: 404 Not Found
+ResponseBody: {
+  message: 'User not found'
+}
+```
+
+### Verification success response
+
+```shell
+Status: 200 OK
+ResponseBody: {
+  message: 'Verification successful',
+}
+```
 
 ## Крок 3
 
-Через Compass створи базу даних `db-contacts` і в ній колекцію `contacts`. Візьми [ссылка на json](./contacts) і за допомогою Compass наповни колекцію `contacts` (зроби імпорт) його вмістом.
+### Додавання відправки email користувачу з посиланням для верифікації
 
-![data](./assets/img/json-data.png)
+При створення користувача при реєстрації:
 
-Якщо ви все зробили правильно, дані повинні з'явитися у вашій базі в колекції `contacts`
-
-![data](./assets/img/mongo-data.png)
+- створити `verificationToken` для користувача і записати його в БД (для генерації токена використовуйте пакет [uuid](https://www.npmjs.com/package/uuid) або [nanoid](https://www.npmjs.com/package/nanoid))
+- відправити email на пошту користувача і вказати посилання для верифікації email'а ( `/users/verify/:verificationToken`) в повідомленні
+- Так само необхідно враховувати, що тепер логін користувача не дозволено, якщо не верифікувано email
 
 ## Крок 4
 
-Використовуй вихідний код [домашней работы #2](../homework-02/README.md) і
-заміни зберігання контактів з json-файлу на створену тобою базу даних.
+### Додавання повторної відправки email користувачу з посиланням для верифікації
 
-- Напиши код для створення підключення до MongoDB за допомогою [Mongoose](https://mongoosejs.com/).
-- При успішному підключенні виведи в консоль повідомлення `"Database connection successful"`.
-- Обов'язково обробив помилку підключення. Виведи в консоль повідомлення помилки і заверши процес використовуючи `process.exit(1)`.
-- У функціях обробки запитів заміни код CRUD-операцій над контактами з файлу, на Mongoose-методи для роботи з колекцією контактів в базі даних.
+Необхідно передбачити, варіант, що користувач може випадково видалити лист. Воно може не дійти з якоїсь причини до адресата. Наш сервіс відправки листів під час реєстрації видав помилку і т.д.
 
-Схема моделі для колекції `contacts`:
+#### @ POST /users/verify
 
-```js
-  {
-    name: {
-      type: String,
-      required: [true, 'Set name for contact'],
-    },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
-  }
+- Отримує `body` в форматі `{email}`
+- Якщо в `body` немає обов'язкового поля `email`, повертає json з ключем `{"message":"missing required field email"}` і статусом `400`
+- Якщо з `body` все добре, виконуємо повторну відправку листа з `verificationToken` на вказаний email, але тільки якщо користувач не верифікований
+- Якщо користувач вже пройшов верифікацію відправити json з ключем `{"message":"Verification has already been passed"}` зі статусом `400 Bad Request`
+
+#### Resending a email request
+
+````shell
+POST /users/verify
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com"
+}
+`` `
+
+#### Resending a email validation error
+
+```shell
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: <Помилка від Joi або іншої бібліотеки валідації>
+````
+
+#### Resending a email success response
+
+```shell
+Status: 200 Ok
+Content-Type: application/json
+ResponseBody: {
+  "message": "Verification email sent"
+}
 ```
 
-## Крок 5
+#### Resend email for verified user
 
-У нас з'явилося в контактах додаткове поле статусу `favorite`, яке приймає логічне значення` true` або `false`. Воно відповідає за те, що в обраному чи ні знаходиться зазначений контакт. Потрыбно реалізувати для оновлення статусу контакту новий роутер
+```shell
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: {
+  message: "Verification has already been passed"
+}
+```
 
-### @ PATCH / api / contacts /: contactId / favorite
-
-- Отримує параметр `contactId`
-- Отримує `body` в json-форматі c оновленням поля` favorite`
-- Якщо `body` немає, повертає json з ключем`{ "message": "missing field favorite"}`і статусом` 400`
-- Якщо з `body` все добре, викликає функцію` updateStatusContact (contactId, body)` (напиши її) для поновлення контакту в базі
-- За результатом роботи функції повертає оновлений об'єкт контакту і статусом `200`. В іншому випадку, повертає json з ключем `" message ":" Not found "` і статусом `404`
-
-Для роута `POST /api/contacts` внеси зміни: якщо поле `favorite` не вказали в `body`, то при збереженні в базу нового контакту, зроби поле `favorite` рівним за замовчуванням `false`
+> Примітка: Як альтернативу SendGrid можна використовувати пакет [nodemailer](https://www.npmjs.com/package/nodemailer)
