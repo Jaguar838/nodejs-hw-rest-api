@@ -4,12 +4,12 @@ const { HttpCode } = require('../config/constants');
 const { CustomError } = require('../helpers/customError');
 require('dotenv').config();
 // cloud-update
-const fs = require('fs/promises');
-const UploadService = require('../services/cloud-upload');
+// const fs = require('fs/promises');
+// const UploadService = require('../services/avatars/cloud-upload');
 // file upload
-// const path = require('path');
-// const mkdirp = require('mkdirp');
-// const UploadService = require('../services/file-upload');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const UploadService = require('../services/avatars/file-upload');
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -108,51 +108,51 @@ const update = async (req, res) => {
 };
 
 // Local storage
-// const uploadAvatar = async (req, res, next) => {
-//   const id = String(req.user._id);
-//   const file = req.file;
-//   const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
-//   const destination = path.join(AVATAR_OF_USERS, id);
-//   await mkdirp(destination);
-//   const uploadService = new UploadService(destination);
-//   const avatarUrl = await uploadService.save(file, id);
-//   await Users.updateAvatar(id, avatarUrl);
-//   return res.status(200).json({
-//     status: 'success',
-//     code: 200,
-//     data: {
-//       avatar: avatarUrl,
-//     },
-//   });
-//   // const pic = req.file;
-//   // console.log(pic);
-//   // return res.status(HttpCode.OK).json({ pic });
-// };
-
-// Cloud storage
 const uploadAvatar = async (req, res, next) => {
-  const { id, idUserCloud } = req.user;
+  const id = String(req.user._id);
   const file = req.file;
-
-  const destination = 'Avatars';
+  const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+  const destination = path.join(AVATAR_OF_USERS, id);
+  await mkdirp(destination);
   const uploadService = new UploadService(destination);
-  const { avatarUrl, returnIdUserCloud } = await uploadService.save(file.path, idUserCloud);
-
-  await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
-  try {
-    // удаляем загруженный в папку uploads файл
-    await fs.unlink(file.path);
-  } catch (error) {
-    console.log(error.message);
-  }
-  return res.status(HttpCode.OK).json({
+  const avatarUrl = await uploadService.save(file, id);
+  await Users.updateAvatar(id, avatarUrl);
+  return res.status(200).json({
     status: 'success',
     code: 200,
     data: {
       avatar: avatarUrl,
     },
   });
+  // const pic = req.file;
+  // console.log(pic);
+  // return res.status(HttpCode.OK).json({ pic });
 };
+
+// Cloud storage
+// const uploadAvatar = async (req, res, next) => {
+//   const { id, idUserCloud } = req.user;
+//   const file = req.file;
+
+//   const destination = 'Avatars';
+//   const uploadService = new UploadService(destination);
+//   const { avatarUrl, returnIdUserCloud } = await uploadService.save(file.path, idUserCloud);
+
+//   await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
+//   try {
+//     // удаляем загруженный в папку uploads файл
+//     await fs.unlink(file.path);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+//   return res.status(HttpCode.OK).json({
+//     status: 'success',
+//     code: 200,
+//     data: {
+//       avatar: avatarUrl,
+//     },
+//   });
+// };
 
 module.exports = {
   registration,

@@ -18,7 +18,7 @@ class UploadFileAvatar {
   }
 
   async save(file, idUser) {
-    await this.transformAvatar(file.path);
+    await this.#transformAvatar(file.path);
     await fs.rename(file.path, path.join(this.destination, file.filename));
     // Для статики в express папка не для урла, все что внутри папки для него урл
     return path.normalize(path.join(idUser, file.filename));
