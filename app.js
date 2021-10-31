@@ -16,6 +16,7 @@ app.use(express.static(AVATAR_OF_USERS));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(helmet());
+
 //remove logs in test mode 
 app.get('env') !== 'test' && app.use(logger(formatsLogger))
 app.use(cors());
