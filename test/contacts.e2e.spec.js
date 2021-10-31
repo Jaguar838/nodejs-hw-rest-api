@@ -36,7 +36,7 @@ describe("Test route contacts", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(response.status).toEqual(200);
       expect(response.body).toBeDefined();
-      expect(response.body.data.contacts).toBeInstanceOf();
+      expect(response.body.data.contacts).toBeInstanceOf(Array);
     });
 
     it("should return status 200 get by ID contact", async () => {
@@ -47,10 +47,10 @@ describe("Test route contacts", () => {
 
       expect(response.status).toEqual(200);
       expect(response.body).toBeDefined();
-      expect(response.body.data.contacts).toHaveProperty("id");
-      expect(response.body.data.contacts).toHaveProperty("name");
-      expect(response.body.data.contacts).toHaveProperty("email");
-      expect(response.body.data.contacts).toHaveProperty("phone");
+      expect(response.body.data.contact).toHaveProperty("id");
+      expect(response.body.data.contact).toHaveProperty("name");
+      expect(response.body.data.contact).toHaveProperty("email");
+      expect(response.body.data.contact).toHaveProperty("phone");
     });
 
     it("should return status 404 if contact  not found", async () => {
@@ -66,7 +66,7 @@ describe("Test route contacts", () => {
     });
   });
   describe("POST request", () => {
-    it("should return status 201 create cat", async () => {
+    it("should return status 201 create contact", async () => {
       const response = await request(app)
         .post("/api/contacts")
         .set("Authorization", `Bearer ${token}`)

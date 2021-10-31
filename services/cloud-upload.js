@@ -19,11 +19,20 @@ class UploadFileAvatar {
   }
 
   async save(filePath, idUserCloud) {
-    const { public_id: returnIdUserCloud, secure_url: avatarUrl } = await this.uploadCloud(filePath, {
-      public_id: idUserCloud,
-      folder: this.destination,
-      transformation: { width: 250, height: 250, crop: 'pad' },
-    });
+    const { public_id: returnIdUserCloud, secure_url: avatarUrl } = await this.uploadCloud(
+      filePath,
+      // Объект настроек файла-аватар
+      {
+        public_id: idUserCloud,
+        folder: this.destination,
+        // crop: 'pad' - режим обрезки
+        transformation: { width: 250, height: 250, crop: 'pad' },
+      },
+    );
+    console.log(
+      '🚀 ~ file: cloud-upload.js ~ line 32 ~ UploadFileAvatar ~ save ~ returnIdUserCloud',
+      returnIdUserCloud,
+    );
     return {
       avatarUrl: avatarUrl,
       returnIdUserCloud: returnIdUserCloud.replace(`${this.destination}/`, ''),

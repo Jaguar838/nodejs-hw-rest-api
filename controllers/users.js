@@ -59,7 +59,7 @@ const login = async (req, res) => {
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
-    date: {
+    data: {
       token,
     },
   });
@@ -80,9 +80,11 @@ const current = async (req, res) => {
       code: HttpCode.OK,
       message: 'Current user',
       data: {
+        // user,
         id: user.id,
         email: user.email,
         subscription: user.subscription,
+        avatar: user.avatar,
       },
     });
   }
@@ -118,7 +120,7 @@ const update = async (req, res) => {
 //   return res.status(200).json({
 //     status: 'success',
 //     code: 200,
-//     date: {
+//     data: {
 //       avatar: avatarUrl,
 //     },
 //   });
@@ -138,6 +140,7 @@ const uploadAvatar = async (req, res, next) => {
 
   await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
   try {
+    // удаляем загруженный в папку uploads файл
     await fs.unlink(file.path);
   } catch (error) {
     console.log(error.message);
@@ -145,7 +148,7 @@ const uploadAvatar = async (req, res, next) => {
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: 200,
-    date: {
+    data: {
       avatar: avatarUrl,
     },
   });

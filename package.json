@@ -5,6 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "debug": "node --inspect ./bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
     "test": "cross-env NODE_ENV=test jest --no-cache --watch --detectOpenHandles --verbose",
