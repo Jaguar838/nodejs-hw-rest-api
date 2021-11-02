@@ -1,0 +1,34 @@
+[{
+  "_id": {
+    "$oid": "617906c81418f9fa7ad47cc6"
+  },
+  "password": "$2a$06$ZnReyo3CVxD2zr9Cn4lI4e5MfMVswuZz3u4L.lGReVwYnqmjhJbRG",
+  "email": "nulla.ante@vestibul.co.uk",
+  "subscription": "business",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNzkwNmM4MTQxOGY5ZmE3YWQ0N2NjNiIsImlhdCI6MTYzNTUzNzg5NCwiZXhwIjoxNjM1NTQxNDk0fQ.cbAVIrRZBI9Q6B23covaJjhLQtPA9Pkdafj5yQyHAVY",
+  "gender": "male",
+  "isVerified": true,
+  "verifyTokenEmail": null
+},{
+  "_id": {
+    "$oid": "617c69afafda200d5a0aa8b4"
+  },
+  "name": "Guest",
+  "email": "test@ex.ua",
+  "password": "$2a$04$B4aX7CTIk1bx2IzxkQvuduqSs49cR0eaLwAEwIHxz.puLAbdrfMEm",
+  "gender": "female",
+  "subscription": "starter",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxN2M2OWFmYWZkYTIwMGQ1YTBhYThiNCIsImlhdCI6MTYzNTcwMDU5MywiZXhwIjoxNjM1NzA0MTkzfQ.2i-nfdeJasnV1KuL6q669LorqudLH-bT6RFqTz3ZIe4",
+  "avatar": "617c69afafda200d5a0aa8b4\\1635701360549_term (5).png"
+},{
+  "_id": {
+    "$oid": "617c6a61afda200d5a0aa8b7"
+  },
+  "name": "Guest",
+  "email": "krabat@ex.ua",
+  "password": "$2a$04$53uNTjFvaxM4KmRfSONjM.flRtkBdE3a3g1aEfuJ9PmPSZW5l.BkS",
+  "gender": "male",
+  "subscription": "pro",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxN2M2YTYxYWZkYTIwMGQ1YTBhYThiNyIsImlhdCI6MTYzNTY3NjI2NSwiZXhwIjoxNjM1Njc5ODY1fQ.vf72K7H7E_dD8eitd_gpKwncWrPHB1arK_FgGBL2Cwk",
+  "avatar": "https://res.cloudinary.com/goitnode/image/upload/v1635577130/Avatars/chp6rcoiouynvuztgzia.png"
+}]
