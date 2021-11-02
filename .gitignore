@@ -1,6 +1,7 @@
 .dccache
 node_modules
-
+coverage/
+public/
 .env
 *.log
 *.zip
