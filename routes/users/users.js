@@ -26,8 +26,10 @@ router.post('/login', loginLimit, validateLogin, login);
 router.post('/logout', guard, logout);
 router.get('/current', guard, wrapError(current));
 // Загрузка avatar
-router.patch('/avatar', guard, upload.single('avatar'), uploadAvatar);
+router.patch('/avatar', guard, upload.single('avatar'), wrapError(uploadAvatar));
 // Email
 router.get('/verify/:token', wrapError(verifyUser));
-router.post('/verify', repeatEmailForVerifyUser);
+
+// В body отправляем email по которому повторно верифицируем
+router.post('/verify', wrapError(repeatEmailForVerifyUser));
 module.exports = router;

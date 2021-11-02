@@ -26,7 +26,7 @@ describe('Test route users', () => {
     await mongo.disconnect();
   });
 
-  it('register user', async () => {
+  fit('register user', async () => {
     const response = await request(app)
       .post('/api/users/registration')
       .send(newUserForRouteUser)
@@ -54,12 +54,14 @@ describe('Test route users', () => {
 
     expect(response.status).toEqual(200);
     expect(response.body).toBeDefined();
+    // debugger; // node --inspect-brk ./node_modules/bin/jest ./test/user.e2e.spec.js
     console.log(response.body);
     token = response.body.data.token;
   });
+
   it('Upload avatar for user', async () => {
     const buffer = await fs.readFile('./test/data/avatar-female.jpg');
-    
+
     const response = await request(app)
       .patch(`/api/users/avatar`)
       .set('Authorization', `Bearer ${token}`)

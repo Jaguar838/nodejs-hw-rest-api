@@ -48,8 +48,11 @@ const userSchema = new Schema(
       },
     },
     idUserCloud: { type: String, default: null },
+    //  Email verify
+    // Изначально любой зарегестрированный пользователь не верифицирован - false
     isVerified: { type: Boolean, default: false },
-    verifyToken: {
+    // но у него есть для верификации токен генерируемый по умолчанию в db.
+    verifyTokenEmail: {
       type: String,
       required: true,
       default: crypto.randomUUID(),

@@ -6,6 +6,7 @@
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "debug": "node --inspect ./bin/server.js",
+    "deb": "node --inspect-brk ./node_modules/bin/jest ./test/user.e2e.spec.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
     "test": "cross-env NODE_ENV=test jest --no-cache --watch --detectOpenHandles --verbose",

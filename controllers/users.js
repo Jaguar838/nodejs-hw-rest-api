@@ -4,6 +4,7 @@ const { HttpCode } = require('../config/constants');
 const { CustomError } = require('../helpers/customError');
 // Email
 const EmailService = require('../services/email/service');
+const { CreateSenderSendGrid, CreateSenderNodemailer } = require('../services/email/sender');
 require('dotenv').config();
 // cloud-update
 // const fs = require('fs/promises');
@@ -26,7 +27,11 @@ const registration = async (req, res, next) => {
     });
   }
   try {
+    // Создаем нового пользователя и verifyToken
+    // TODO: Send email for verity users
     const newUser = await Users.create({ name, email, password, gender });
+    const emailService = new EmailService(process.env.NODE_ENV, new CreateSenderSendGrid());
+    const statusEmail = await emailService.sendVerifyEmail(newUser.email, newUser.name, newUser.verifyTokenEmail);
     return res.status(HttpCode.CREATED).json({
       status: 'success',
       code: HttpCode.CREATED,
@@ -36,6 +41,7 @@ const registration = async (req, res, next) => {
         email: newUser.email,
         gender: newUser.gender,
         avatar: newUser.avatar,
+        successEmail: statusEmail,
       },
     });
   } catch (e) {
@@ -47,7 +53,11 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await Users.findByEmail(email);
   const isValidPassword = await user?.isValidPassword(password);
-  if (!user || !isValidPassword) {
+  // Возвращаем ошибку если пользователь:
+  // 1) не сущ. в db;
+  // 2) ввел не валидный пароль;
+  // 3) состояние isVerified = false.
+  if (!user || !isValidPassword || !user?.isVerified) {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: 'error',
       code: HttpCode.UNAUTHORIZED,
@@ -155,6 +165,8 @@ const uploadAvatar = async (req, res, next) => {
 //     },
 //   });
 // };
+
+// Controllers verify User
 const verifyUser = async (req, res, next) => {
   const user = await Users.findUserByVerifyToken(req.params.token);
   if (user) {
@@ -163,7 +175,7 @@ const verifyUser = async (req, res, next) => {
       status: 'success',
       code: HttpCode.OK,
       data: {
-        message: 'Success',
+        message: 'Verification successful!',
       },
     });
   }
@@ -174,19 +186,21 @@ const verifyUser = async (req, res, next) => {
   });
 };
 
+// Controllers repeat email  for verify User
 const repeatEmailForVerifyUser = async (req, res, next) => {
   const { email } = req.body;
   const user = await Users.findByEmail(email);
   if (user) {
-    const { email, name, verifyToken } = user;
+    const { email, name, verifyTokenEmail } = user;
     const emailService = new EmailService(process.env.NODE_ENV, new CreateSenderNodemailer());
-    const statusEmail = await emailService.sendVerifyEmail(email, name, verifyToken);
+    // debugger;
+    const statusEmail = await emailService.sendVerifyEmail(email, name, verifyTokenEmail);
   }
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
     data: {
-      message: 'Success',
+      message: 'Verify successful!',
     },
   });
 };

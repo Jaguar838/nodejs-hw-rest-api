@@ -1,3 +1,4 @@
+//  Конкретная реализация каждой отправки
 const sgMail = require('@sendgrid/mail');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
@@ -24,5 +25,4 @@ class CreateSenderNodemailer {
     return await transporter.sendMail({ ...msg, from: 'goitnodejs@meta.ua' });
   }
 }
-
 module.exports = { CreateSenderSendGrid, CreateSenderNodemailer };
