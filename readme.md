@@ -1,150 +1,42 @@
-**Читать на других языках: [Русский](README.md), [Українська](README.ua.md).**
+## REST API Contacts
 
-# Домашнее задание 6
+### Routes Contacts
 
-Создай ветку `hw06-email` из ветки `master`.
+| Method | <http://localhost:{PORT}/api> | Description                  | Properties                     |
+| ------ | ----------------------------- | ---------------------------- | ------------------------------ |
+| GET    | /contacts                     | get all contacts             | Authorization                  |
+| GET    | /contacts/{id}                | get a contact by id          | Authorization                  |
+| POST   | /contacts                     | add a new contact            | Authorization, Body(json)      |
+| PUT    | /contacts/{id}                | update an existing contact   | Authorization, id, Body(json)  |
+| PATCH  | /contacts/{id}                | update at least 1 property   | Authorization, id, Body(json)  |
+| PATCH  | /contacts/{id}/favorite       | update a property isFavorite | Authorization, id, Body(json)  |
+| DELETE | /contacts/{id}                | remove a contact by id       | Authorization, id              |
+| GET    | /contacts?page={1}&limit={20} | pagination                   | Authorization, query parameter |
+| GET    | /contacts?isFavorite={false}  | filter by favorite           | Authorization, query parameter |
 
-Продолжаем создание REST API для работы с коллекцией контактов. Добавьте верификацию email пользователя после регистрации при помощи сервиса [SendGrid](https://sendgrid.com/).
+### Routes Users
 
-## Как процесс верификации должен работать
+| Method | <http://localhost:{PORT}/api>    | Description                 | Properties                   |
+| ------ | -------------------------------- | --------------------------- | ---------------------------- |
+| POST   | /users/registration              | create new user             | Request body                 |
+| POST   | /users/login                     | user login                  | Request body                 |
+| POST   | /users/logout                    | user logout                 | Authorization                |
+| GET    | /users/current                   | get info about current user | Authorization                |
+| PATCH  | /users                           | update user subscription    | Auth., Body(subscription)    |
+| PATCH  | /users/avatar                    | upload user avatar          | Auth., Body(form-data, file) |
+| GET    | /users/verify/{verifyTokenEmail} | verify user email           | query parameter              |
+| POST   | /users/verify                    | repeat verify user email    | Body(email)                  |
 
-1. После регистрации, пользователь должен получить письмо на указанную при регистрации почту с ссылкой для верификации своего email
-2. Пройдя ссылке в полученном письме, в первый раз, пользователь должен получить [Ответ со статусом 200](#verification-success-response), что будет подразумевать успешную верификацию email
-3. Пройдя по ссылке повторно пользователь должен получить [Ошибку со статусом 404](#verification-user-not-found)
+### Schemas db
 
-## Шаг 1
-
-### Подготовка интеграции с SendGrid API
-
-- Зарегистрируйся на [SendGrid](https://sendgrid.com/).
-- Создай email-отправителя. Для это в административной панели SendGrid зайдите в меню Marketing в подменю senders и в правом верхнем углу нажмите кнопку "Create New Sender". Заполните необходимые поля в предложенной форме. Сохраните. Должен получится следующий как на картинке результат, только с вашим email:
-
-![sender](assets/img/sender-not-verify.png)
-
-На указанный email должно прийти письмо верификации (проверьте спам если не видите письма). Кликните на ссылку в нем и завершите процесс. Результат должен изменится на:
-
-![sender](assets/img/sender-verify.png)
-
-- Теперь необходимо создать API токен доступа. Выбираем меню "Email API", и подменю "Integration Guide". Здесь выбираем "Web API"
-
-![api-key](assets/img/web-api.png)
-
-Дальше необходимо выбрать технологию Node.js
-
-![api-key](assets/img/node.png)
-
-На третьем шаге даем имя нашему токену. Например systemcats, нажимаем кнопку сгенерировать и получаем результат как на скриншоте ниже. Необходимо скопировать этот токен (это важно, так как больше вы не сможете его посмотреть). После завершить процесс создания токена
-
-![api-key](assets/img/api-key.png)
-
-- Полученный API-токен надо добавить в `.env` файл в нашем проекте
-
-## Шаг 2
-
-### Создание ендпоинта для верификации email'а
-
-- добавить в модель `User` два поля `verificationToken` и `verify`. Значение поля `verify` равное `false` будет означать, что его email еще не прошел верификацию
-
-```js
-{
-  verify: {
-    type: Boolean,
-    default: false,
-  },
-  verifyToken: {
-    type: String,
-    required: [true, 'Verify token is required'],
-  },
-}
-```
-
-- создать эндпоинт GET [`/users/verify/:verificationToken`](#verification-request), где по параметру `verificationToken` мы будем искать пользователя в модели `User`
-- если пользователь с таким токеном не найден, необходимо вернуть [Ошибку 'Not Found'](#verification-user-not-found)
-- если пользователь найден - устанавливаем `verificationToken` в `null`, а поле `verify` ставим равным `true` в документе пользователя и возвращаем [Успешный ответ](#verification-success-response)
-
-### Verification request
-
-```shell
-GET /users/verify/:verificationToken
-```
-
-### Verification user Not Found
-
-```shell
-Status: 404 Not Found
-ResponseBody: {
-  message: 'User not found'
-}
-```
-
-### Verification success response
-
-```shell
-Status: 200 OK
-ResponseBody: {
-  message: 'Verification successful',
-}
-```
-
-## Шаг 3
-
-### Добавление отправки email пользователю с ссылкой для верификации
-
-При создания пользователя при регистрации:
-
-- создать `verificationToken` для пользователя и записать его в БД (для генерации токена используйте пакет [uuid](https://www.npmjs.com/package/uuid) или [nanoid](https://www.npmjs.com/package/nanoid))
-- отправить email на почту пользователя и указать ссылку для верификации email'а (`/users/verify/:verificationToken`) в сообщении
-- Так же необходимо учитывать, что теперь логин пользователя не разрешен при не верифицированном email
-
-## Шаг 4
-
-### Добавление повторной отправки email пользователю с ссылкой для верификации
-
-Необходимо предусмотреть, вариант, что пользователь может случайно удалить письмо. Оно может не дойти по какой-то причине к адресату. Наш сервис отправки писем во время регистрации выдал ошибку и т.д.
-
-#### @ POST /users/verify/
-
-- Получает `body` в формате `{ email }`
-- Если в `body` нет обязательного поля `email`, возвращает json с ключом `{"message": "missing required field email"}` и статусом `400`
-- Если с `body` все хорошо, выполняем повторную отправку письма с `verificationToken` на указанный email, но только если пользователь не верифицирован
-- Если пользователь уже прошел верификацию отправить json с ключом `{ message: "Verification has already been passed"}` со статусом `400 Bad Request`
-
-#### Resending a email request
-
-```shell
-POST /users/verify
-Content-Type: application/json
-RequestBody: {
-  "email": "example@example.com"
-}
-```
-
-#### Resending a email validation error
-
-```shell
-Status: 400 Bad Request
-Content-Type: application/json
-ResponseBody: <Ошибка от Joi или другой библиотеки валидации>
-```
-
-#### Resending a email success response
-
-```shell
-Status: 200 Ok
-Content-Type: application/json
-ResponseBody: {
-  "message": "Verification email sent"
-}
-```
-
-#### Resend email for verified user
-
-```shell
-Status: 400 Bad Request
-Content-Type: application/json
-ResponseBody: {
-  message: "Verification has already been passed"
-}
-```
-
-> Примечание: Как альтернативу SendGrid можно использовать пакет [nodemailer](https://www.npmjs.com/package/nodemailer)
+| Schema Contacts | Types   | Schema Users        | Types   |
+| --------------- | ------- | ------------------- | ------- |
+| name            | String  | email \*            | String  |
+| email           | String  | password \*         | String  |
+| phone           | String  | name                | String  |
+| isFavorite      | Boolean | gender              | String  |
+| owner           | String  | avatar              | String  |
+|                 |         | subscription        | String  |
+|                 |         | verifyTokenEmail \* | String  |
+|                 |         | isVerified          | Boolean |
+|                 |         | token               | String  |
