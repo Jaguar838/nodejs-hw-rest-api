@@ -1,91 +1,150 @@
-# Домашнее задание 2
+**Читать на других языках: [Русский](README.md), [Українська](README.ua.md).**
 
-Создай форк [репозитория](https://github.com/goitacademy/nodejs-homework-template) в свой github аккаунт.
+# Домашнее задание 6
 
-Посмотри поясняющее видео как это сделать и сдавать ДЗ правильно: [<img src="./js.png" width="640">](https://www.youtube.com/watch?v=wabSW_sz_cM 'Пояснение')
+Создай ветку `hw06-email` из ветки `master`.
 
-Написать REST API для работы с коллекцией контактов. Для работы с REST API используй [Postman](https://www.getpostman.com/).
+Продолжаем создание REST API для работы с коллекцией контактов. Добавьте верификацию email пользователя после регистрации при помощи сервиса [SendGrid](https://sendgrid.com/).
 
-Прочитай внимательно readme в клонированном бойлерплейте, там описан механизм сдачи домашних заданий. Приступай к выполнению ДЗ
+## Как процесс верификации должен работать
+
+1. После регистрации, пользователь должен получить письмо на указанную при регистрации почту с ссылкой для верификации своего email
+2. Пройдя ссылке в полученном письме, в первый раз, пользователь должен получить [Ответ со статусом 200](#verification-success-response), что будет подразумевать успешную верификацию email
+3. Пройдя по ссылке повторно пользователь должен получить [Ошибку со статусом 404](#verification-user-not-found)
 
 ## Шаг 1
 
-Создай ветку `hw02-express` из ветки master.
+### Подготовка интеграции с SendGrid API
 
-Установи модули командой:
+- Зарегистрируйся на [SendGrid](https://sendgrid.com/).
+- Создай email-отправителя. Для это в административной панели SendGrid зайдите в меню Marketing в подменю senders и в правом верхнем углу нажмите кнопку "Create New Sender". Заполните необходимые поля в предложенной форме. Сохраните. Должен получится следующий как на картинке результат, только с вашим email:
 
-```bash
-npm i
-```
+![sender](assets/img/sender-not-verify.png)
 
-Следующие модули уже есть в проекте:
+На указанный email должно прийти письмо верификации (проверьте спам если не видите письма). Кликните на ссылку в нем и завершите процесс. Результат должен изменится на:
 
-- [express](https://www.npmjs.com/package/express)
-- [morgan](https://www.npmjs.com/package/morgan)
-- [cors](https://www.npmjs.com/package/cors)
+![sender](assets/img/sender-verify.png)
+
+- Теперь необходимо создать API токен доступа. Выбираем меню "Email API", и подменю "Integration Guide". Здесь выбираем "Web API"
+
+![api-key](assets/img/web-api.png)
+
+Дальше необходимо выбрать технологию Node.js
+
+![api-key](assets/img/node.png)
+
+На третьем шаге даем имя нашему токену. Например systemcats, нажимаем кнопку сгенерировать и получаем результат как на скриншоте ниже. Необходимо скопировать этот токен (это важно, так как больше вы не сможете его посмотреть). После завершить процесс создания токена
+
+![api-key](assets/img/api-key.png)
+
+- Полученный API-токен надо добавить в `.env` файл в нашем проекте
 
 ## Шаг 2
 
-В app.js – веб сервер на express, добавлены прослойки `morgan` и `cors`. Начни настраивать раутинг для работы с коллекцией контактов.
+### Создание ендпоинта для верификации email'а
 
-REST API должен поддерживать следующие рауты.
+- добавить в модель `User` два поля `verificationToken` и `verify`. Значение поля `verify` равное `false` будет означать, что его email еще не прошел верификацию
 
-### @ GET /api/contacts
+```js
+{
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
+}
+```
 
-- ничего не получает
-- вызывает функцию `listContacts` для работы с json-файлом `contacts.json`
-- возвращает массив всех контактов в json-формате со статусом `200`
+- создать эндпоинт GET [`/users/verify/:verificationToken`](#verification-request), где по параметру `verificationToken` мы будем искать пользователя в модели `User`
+- если пользователь с таким токеном не найден, необходимо вернуть [Ошибку 'Not Found'](#verification-user-not-found)
+- если пользователь найден - устанавливаем `verificationToken` в `null`, а поле `verify` ставим равным `true` в документе пользователя и возвращаем [Успешный ответ](#verification-success-response)
 
-### @ GET /api/contacts/:contactId
+### Verification request
 
-- Не получает `body`
-- Получает параметр `contactId`
-- вызывает функцию getById для работы с json-файлом contacts.json
-- если такой id есть, возвращает обьект контакта в json-формате со статусом `200`
-- если такого id нет, возвращает json с ключом `"message": "Not found"` и статусом `404`
+```shell
+GET /users/verify/:verificationToken
+```
 
-### @ POST /api/contacts
+### Verification user Not Found
 
-- Получает `body` в формате `{name, email, phone}`
-- Если в body нет каких-то обязательных полей, возвращает json с ключом `{"message": "missing required name field"}` и статусом `400`
-- Если с `body` все хорошо, добавляет уникальный идентификатор в объект контакта
-- Вызывает функцию `addContact(body)` для сохранения контакта в файле `contacts.json`
-- По результату работы функции возвращает объект с добавленным `id` `{id, name, email, phone}` и статусом `201`
+```shell
+Status: 404 Not Found
+ResponseBody: {
+  message: 'User not found'
+}
+```
 
-### @ DELETE /api/contacts/:contactId
+### Verification success response
 
-- Не получает `body`
-- Получает параметр `contactId`
-- вызывает функцию `removeContact` для работы с json-файлом `contacts.json`
-- если такой `id` есть, возвращает json формата `{"message": "contact deleted"}` и статусом `200`
-- если такого `id` нет, возвращает json с ключом `"message": "Not found"` и статусом `404`
-
-### @ PUT /api/contacts/:contactId
-
-- Получает параметр `contactId`
-- Получает `body` в json-формате c обновлением любых полей `name, email и phone`
-- Если `body` нет, возвращает json с ключом `{"message": "missing fields"}` и статусом `400`
-- Если с `body` все хорошо, вызывает функцию `updateContact(contactId, body)` (напиши ее) для обновления контакта в файле `contacts.json`
-- По результату работы функции возвращает обновленный объект контакта и статусом `200`. В противном случае, возвращает json с ключом `"message": "Not found"` и статусом `404`
+```shell
+Status: 200 OK
+ResponseBody: {
+  message: 'Verification successful',
+}
+```
 
 ## Шаг 3
 
-Для маршрутов, что принимают данные (`POST`, `PUT`, `PATCH`), продумайте проверку (валидацию) принимаемых данных. Для валидации принимаемых данных можно использовать один из пакетов – валидаторов данных, а не писать проверки самостоятельно:
+### Добавление отправки email пользователю с ссылкой для верификации
 
-1. [joi](https://github.com/sideway/joi)
-2. [express-validator](https://github.com/express-validator/express-validator)
-3. [yup](https://github.com/jquense/yup)
+При создания пользователя при регистрации:
 
-<img src="validator.png" width="640">
+- создать `verificationToken` для пользователя и записать его в БД (для генерации токена используйте пакет [uuid](https://www.npmjs.com/package/uuid) или [nanoid](https://www.npmjs.com/package/nanoid))
+- отправить email на почту пользователя и указать ссылку для верификации email'а (`/users/verify/:verificationToken`) в сообщении
+- Так же необходимо учитывать, что теперь логин пользователя не разрешен при не верифицированном email
 
-## Критерии приема дз #2-6
+## Шаг 4
 
-- Создан репозиторий с домашним заданием &mdash; REST API приложение
-- При создании репозитория использован [бойлерплейт](https://github.com/goitacademy/nodejs-homework-template)
-- Пулл-реквест (PR) с соответствующим дз отправлен ментору в [schoology](https://app.schoology.com/login) на проверку (ссылка на PR)
-- Код соответствует техническому заданию проекта
-- При выполнении кода не возникает необработанных ошибок
-- Название переменных, свойств и методов начинается со строчной буквы и записываются в нотации CamelCase. Используются английские существительные
-- Название функции или метода содержит глагол
-- В коде нет закомментированных участков кода
-- Проект корректно работает в актуальной LTS-версии Node
+### Добавление повторной отправки email пользователю с ссылкой для верификации
+
+Необходимо предусмотреть, вариант, что пользователь может случайно удалить письмо. Оно может не дойти по какой-то причине к адресату. Наш сервис отправки писем во время регистрации выдал ошибку и т.д.
+
+#### @ POST /users/verify/
+
+- Получает `body` в формате `{ email }`
+- Если в `body` нет обязательного поля `email`, возвращает json с ключом `{"message": "missing required field email"}` и статусом `400`
+- Если с `body` все хорошо, выполняем повторную отправку письма с `verificationToken` на указанный email, но только если пользователь не верифицирован
+- Если пользователь уже прошел верификацию отправить json с ключом `{ message: "Verification has already been passed"}` со статусом `400 Bad Request`
+
+#### Resending a email request
+
+```shell
+POST /users/verify
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com"
+}
+```
+
+#### Resending a email validation error
+
+```shell
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: <Ошибка от Joi или другой библиотеки валидации>
+```
+
+#### Resending a email success response
+
+```shell
+Status: 200 Ok
+Content-Type: application/json
+ResponseBody: {
+  "message": "Verification email sent"
+}
+```
+
+#### Resend email for verified user
+
+```shell
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: {
+  message: "Verification has already been passed"
+}
+```
+
+> Примечание: Как альтернативу SendGrid можно использовать пакет [nodemailer](https://www.npmjs.com/package/nodemailer)

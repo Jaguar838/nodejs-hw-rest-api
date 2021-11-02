@@ -1,4 +1,6 @@
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
+const { HttpCode } = require("../../config/constants");
 
 const patterns = {
   name: /[a-zA-Zа-яА-Я]*$/,
@@ -6,20 +8,20 @@ const patterns = {
   id: /^\d+$|^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/,
 };
 
-const schemaUser = Joi.object({
+const schemaContact = Joi.object({
   name: Joi.string().pattern(patterns.name).min(1).max(20).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().pattern(patterns.phone).required(),
   isFavorite: Joi.boolean().optional(),
 });
 
-const schemaUserPatch = Joi.object({
+const schemaContactPatch = Joi.object({
   isFavorite: Joi.boolean().required(),
 });
 
-const schemaUserId = {
-  id: Joi.string().pattern(patterns.id).required(),
-};
+const schemaContactId = Joi.object({
+  id: Joi.objectId().required(),
+});
 
 const validate = async (schema, obj, res, next) => {
   try {
@@ -28,20 +30,20 @@ const validate = async (schema, obj, res, next) => {
   } catch (err) {
     res.status(400).json({
       status: "error",
-      code: 400,
+      code: HttpCode.BAD_REQUEST,
       message: `Field ${err.message.replace(/"/g, "")}`,
     });
   }
 };
 
-module.exports.validateUser = async (req, res, next) => {
-  return await validate(schemaUser, req.body, res, next);
+module.exports.validateContact = async (req, res, next) => {
+  return await validate(schemaContact, req.body, res, next);
 };
 
-module.exports.validateUserPatch = async (req, res, next) => {
-  return await validate(schemaUserPatch, req.body, res, next);
+module.exports.validateContactPatch = async (req, res, next) => {
+  return await validate(schemaContactPatch, req.body, res, next);
 };
 
-module.exports.validateUserId = async (req, res, next) => {
-  return await validate(schemaUserId, req.params, res, next);
+module.exports.validateContactId = async (req, res, next) => {
+  return await validate(schemaContactId, req.params, res, next);
 };
